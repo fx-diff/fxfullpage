@@ -1,0 +1,134 @@
+{
+  "extName": {
+    "message": "FX Full Page"
+  },
+  "extDescription": {
+    "message": "Full page screenshots with a built-in editor: crop, highlight, blur, export to PNG, JPG or PDF."
+  },
+  "actionTitle": {
+    "message": "Capture the full page"
+  },
+  "errTabLeft": {
+    "message": "The tab was left during the capture."
+  },
+  "errCaptureFailed": {
+    "message": "Capture failed: $1"
+  },
+  "editorTitle": {
+    "message": "Capture – FX Full Page"
+  },
+  "editorTitleFor": {
+    "message": "Capture – $1"
+  },
+  "loading": {
+    "message": "Loading…"
+  },
+  "toolsGroup": {
+    "message": "Tools"
+  },
+  "toolCrop": {
+    "message": "✂ Crop"
+  },
+  "toolCropTitle": {
+    "message": "Crop (C)"
+  },
+  "toolBox": {
+    "message": "▭ Box"
+  },
+  "toolBoxTitle": {
+    "message": "Draw a box (R)"
+  },
+  "toolPixelate": {
+    "message": "▦ Blur"
+  },
+  "toolPixelateTitle": {
+    "message": "Blur / hide an area (B)"
+  },
+  "colorTitle": {
+    "message": "Box color"
+  },
+  "undo": {
+    "message": "↶ Undo"
+  },
+  "undoTitle": {
+    "message": "Undo (Ctrl+Z)"
+  },
+  "reset": {
+    "message": "⟲ Original"
+  },
+  "resetTitle": {
+    "message": "Back to the original"
+  },
+  "zoomActual": {
+    "message": "Actual size"
+  },
+  "zoomFit": {
+    "message": "Fit"
+  },
+  "zoomTitle": {
+    "message": "Toggle fit / actual size (Z)"
+  },
+  "copy": {
+    "message": "⧉ Copy"
+  },
+  "copyTitle": {
+    "message": "Copy to clipboard (Ctrl+C)"
+  },
+  "pngTitle": {
+    "message": "Download as PNG (Ctrl+S)"
+  },
+  "jpgTitle": {
+    "message": "Download as JPG"
+  },
+  "pdfTitle": {
+    "message": "Download as PDF"
+  },
+  "cropApply": {
+    "message": "✓ Crop"
+  },
+  "cropCancel": {
+    "message": "Cancel (Esc)"
+  },
+  "toastOriginalRestored": {
+    "message": "Original image restored (Ctrl+Z to undo)"
+  },
+  "toastPdfGenerating": {
+    "message": "Generating PDF…"
+  },
+  "toastPdfReady": {
+    "message": "PDF ready"
+  },
+  "toastCopied": {
+    "message": "Image copied to clipboard"
+  },
+  "toastCopyFailed": {
+    "message": "Copy failed: $1"
+  },
+  "toastError": {
+    "message": "Error: $1"
+  },
+  "encodeFailed": {
+    "message": "Could not encode the image"
+  },
+  "notFound": {
+    "message": "Capture not found (only the last 10 are kept)."
+  },
+  "untitled": {
+    "message": "Untitled"
+  },
+  "loadError": {
+    "message": "Loading error: $1"
+  },
+  "partLabel": {
+    "message": "Part $1"
+  },
+  "partSuffix": {
+    "message": "part"
+  },
+  "noticeSplit": {
+    "message": "The page is too tall for a single image: it was split into $1 parts."
+  },
+  "noticeTruncated": {
+    "message": "The page was extremely long: the capture was truncated."
+  }
+}

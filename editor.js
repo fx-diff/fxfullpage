@@ -2,6 +2,13 @@ import { getCapture } from './db.js';
 import { buildPdf } from './pdf.js';
 
 const $ = (sel) => document.querySelector(sel);
+const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
+
+document.documentElement.lang = chrome.i18n.getUILanguage();
+document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)));
+document.querySelectorAll('[data-i18n-title]').forEach((el) => (el.title = t(el.dataset.i18nTitle)));
+document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)));
+document.title = t('editorTitle');
 const HISTORY_LIMIT = 15;
 
 const ui = {
@@ -60,7 +67,7 @@ function canvasToBlob(canvas, type, quality) {
       ctx.drawImage(canvas, 0, 0);
       canvas = flat;
     }
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Encodage impossible'))), type, quality);
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error(t('encodeFailed')))), type, quality);
   });
 }
 
@@ -103,7 +110,7 @@ function applyCanvasSize() {
   const ratio = actualSize ? window.devicePixelRatio || 1 : record.scale || 1;
   c.style.width = `${c.width / ratio}px`;
   ui.wrap.classList.toggle('actual', actualSize);
-  ui.zoom.textContent = actualSize ? 'Ajuster' : 'Taille réelle';
+  ui.zoom.textContent = actualSize ? t('zoomFit') : t('zoomActual');
   renderSelection();
 }
 
@@ -154,9 +161,12 @@ function renderSelection() {
   const showActions = tool === 'crop' && !drag && w > 2 && h > 2;
   ui.cropActions.hidden = !showActions;
   if (showActions) {
-    const wrapH = ui.wrap.clientHeight;
+    // Sous la sélection, sauf si cela sort de la fenêtre ou de l'image : alors à l'intérieur.
+    const wrapRect = ui.wrap.getBoundingClientRect();
     const bottom = (y + h) * k;
-    const top = bottom + 40 > wrapH ? Math.max(4, bottom - 40) : bottom + 6;
+    const outside = bottom + 40 > wrapRect.height || wrapRect.top + bottom + 50 > window.innerHeight;
+    const visibleBottom = window.innerHeight - wrapRect.top - 50;
+    const top = outside ? Math.max(y * k + 4, Math.min(bottom - 40, visibleBottom)) : bottom + 6;
     ui.cropActions.style.top = `${top}px`;
     ui.cropActions.style.left = `${Math.max(4, (x + w) * k - 150)}px`;
   }
@@ -315,7 +325,7 @@ async function resetToOriginal() {
   pushHistory();
   clearSelection();
   replaceCanvas(await blobToCanvas(record.parts[current]));
-  toast('Image originale restaurée (Ctrl+Z pour annuler)');
+  toast(t('toastOriginalRestored'));
 }
 
 // ---------- Export ----------
@@ -324,32 +334,32 @@ async function exportImages(type, ext) {
   const base = baseFilename();
   for (let i = 0; i < parts.length; i++) {
     const blob = await canvasToBlob(parts[i].canvas, type, 0.92);
-    const suffix = parts.length > 1 ? `-partie${i + 1}` : '';
+    const suffix = parts.length > 1 ? `-${t('partSuffix')}${i + 1}` : '';
     download(blob, `${base}${suffix}.${ext}`);
   }
 }
 
 async function exportPdf() {
-  toast('Génération du PDF…');
+  toast(t('toastPdfGenerating'));
   const blob = await buildPdf(parts.map((p) => p.canvas));
   download(blob, `${baseFilename()}.pdf`);
-  toast('PDF prêt');
+  toast(t('toastPdfReady'));
 }
 
 async function copyToClipboard() {
   try {
     const blobPromise = canvasToBlob(activeCanvas(), 'image/png');
     await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
-    toast('Image copiée dans le presse-papiers');
+    toast(t('toastCopied'));
   } catch (err) {
     console.error(err);
-    toast(`Copie impossible : ${err.message}`);
+    toast(t('toastCopyFailed', err.message));
   }
 }
 
 function guard(fn) {
   return async (...args) => {
-    try { await fn(...args); } catch (err) { console.error(err); toast(`Erreur : ${err.message}`); }
+    try { await fn(...args); } catch (err) { console.error(err); toast(t('toastError', err.message)); }
   };
 }
 
@@ -366,6 +376,7 @@ $('#dl-png').addEventListener('click', guard(() => exportImages('image/png', 'pn
 $('#dl-jpg').addEventListener('click', guard(() => exportImages('image/jpeg', 'jpg')));
 $('#dl-pdf').addEventListener('click', guard(exportPdf));
 window.addEventListener('resize', renderSelection);
+window.addEventListener('scroll', () => { if (selection && !drag) renderSelection(); }, { passive: true });
 
 document.addEventListener('keydown', (e) => {
   if (!record || e.target.matches('input')) return;
@@ -388,11 +399,11 @@ async function init() {
   const id = new URLSearchParams(location.search).get('id');
   record = id ? await getCapture(id) : null;
   if (!record) {
-    ui.title.textContent = 'Capture introuvable (seules les 10 dernières sont conservées).';
+    ui.title.textContent = t('notFound');
     return;
   }
-  document.title = `Capture – ${record.title || record.url}`;
-  ui.title.textContent = record.title || 'Sans titre';
+  document.title = t('editorTitleFor', record.title || record.url);
+  ui.title.textContent = record.title || t('untitled');
   ui.source.textContent = record.url;
   ui.source.href = record.url;
 
@@ -403,15 +414,15 @@ async function init() {
     ui.parts.hidden = false;
     parts.forEach((_, i) => {
       const b = document.createElement('button');
-      b.textContent = `Partie ${i + 1}`;
+      b.textContent = t('partLabel', i + 1);
       b.addEventListener('click', () => showPart(i));
       ui.parts.appendChild(b);
     });
   }
 
   const notes = [];
-  if (parts.length > 1) notes.push(`La page est trop haute pour une seule image : elle a été découpée en ${parts.length} parties.`);
-  if (record.truncated) notes.push('La page était extrêmement longue : la capture a été tronquée.');
+  if (parts.length > 1) notes.push(t('noticeSplit', parts.length));
+  if (record.truncated) notes.push(t('noticeTruncated'));
   if (notes.length) { ui.notice.textContent = notes.join(' '); ui.notice.hidden = false; }
 
   showPart(0);
@@ -419,5 +430,5 @@ async function init() {
 
 init().catch((err) => {
   console.error(err);
-  ui.title.textContent = `Erreur de chargement : ${err.message}`;
+  ui.title.textContent = t('loadError', err.message);
 });

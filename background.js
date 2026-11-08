@@ -84,7 +84,7 @@ async function captureTab(tab) {
         const actual = await run(tabId, (sx, sy, hide) => window.__fxfp.scrollTo(sx, sy, hide), [x, y, done > 0]);
 
         const current = await chrome.tabs.get(tabId);
-        if (!current.active) throw new Error("L'onglet a été quitté pendant la capture.");
+        if (!current.active) throw new Error(chrome.i18n.getMessage('errTabLeft'));
 
         const dataUrl = await throttledCapture(tab.windowId);
         const bmp = await createImageBitmap(await (await fetch(dataUrl)).blob());
@@ -144,7 +144,7 @@ async function captureTab(tab) {
     console.error('[FX Full Page]', err);
     await setBadge(tabId, '!', '#dc2626');
     try {
-      await chrome.action.setTitle({ tabId, title: `Échec de la capture : ${err.message}` });
+      await chrome.action.setTitle({ tabId, title: chrome.i18n.getMessage('errCaptureFailed', [err.message]) });
     } catch { /* ignore */ }
     setTimeout(() => setBadge(tabId, ''), 5000);
   } finally {

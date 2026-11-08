@@ -38,7 +38,19 @@ Exports : PNG, JPG, PDF (pages au format A4, largeur de la capture).
   conteneur défilant.
 - Pages très hautes : découpées en plusieurs images (limite des canvas Chrome ~32 000 px).
 - `db.js` : les 10 dernières captures sont conservées dans IndexedDB.
-- `editor.*` : éditeur ; `pdf.js` : petit générateur PDF sans dépendance.
+- `editor.*` : éditeur (le bouton ✓ reste visible même pour une grande sélection) ; `pdf.js` : petit générateur PDF sans dépendance.
+
+## Langues
+
+Interface en anglais (par défaut) et en français, selon la langue de Chrome. Les textes sont dans
+`_locales/<langue>/messages.json`.
+
+## Publication sur le Chrome Web Store
+
+- `./scripts/package.sh` génère `dist/fxfullpage-<version>.zip`, prêt à envoyer.
+- Penser à incrémenter `version` dans `manifest.json` à chaque nouvelle soumission.
+- Textes de la fiche, justifications des permissions et visuels : dossier `store/` (voir `store/LISTING.md`).
+- Règles de confidentialité : `PRIVACY.md`.
 
 ## Limites connues
 

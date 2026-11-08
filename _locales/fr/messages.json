@@ -1,0 +1,134 @@
+{
+  "extName": {
+    "message": "FX Full Page"
+  },
+  "extDescription": {
+    "message": "Captures d'écran pleine page avec éditeur intégré : recadrage, encadré, floutage, export PNG, JPG ou PDF."
+  },
+  "actionTitle": {
+    "message": "Capturer la page entière"
+  },
+  "errTabLeft": {
+    "message": "L'onglet a été quitté pendant la capture."
+  },
+  "errCaptureFailed": {
+    "message": "Échec de la capture : $1"
+  },
+  "editorTitle": {
+    "message": "Capture – FX Full Page"
+  },
+  "editorTitleFor": {
+    "message": "Capture – $1"
+  },
+  "loading": {
+    "message": "Chargement…"
+  },
+  "toolsGroup": {
+    "message": "Outils"
+  },
+  "toolCrop": {
+    "message": "✂ Recadrer"
+  },
+  "toolCropTitle": {
+    "message": "Recadrer (C)"
+  },
+  "toolBox": {
+    "message": "▭ Encadré"
+  },
+  "toolBoxTitle": {
+    "message": "Encadrer (R)"
+  },
+  "toolPixelate": {
+    "message": "▦ Flouter"
+  },
+  "toolPixelateTitle": {
+    "message": "Flouter / masquer (B)"
+  },
+  "colorTitle": {
+    "message": "Couleur de l'encadré"
+  },
+  "undo": {
+    "message": "↶ Annuler"
+  },
+  "undoTitle": {
+    "message": "Annuler (Ctrl+Z)"
+  },
+  "reset": {
+    "message": "⟲ Original"
+  },
+  "resetTitle": {
+    "message": "Revenir à l'original"
+  },
+  "zoomActual": {
+    "message": "Taille réelle"
+  },
+  "zoomFit": {
+    "message": "Ajuster"
+  },
+  "zoomTitle": {
+    "message": "Basculer entre ajusté et taille réelle (Z)"
+  },
+  "copy": {
+    "message": "⧉ Copier"
+  },
+  "copyTitle": {
+    "message": "Copier dans le presse-papiers (Ctrl+C)"
+  },
+  "pngTitle": {
+    "message": "Télécharger en PNG (Ctrl+S)"
+  },
+  "jpgTitle": {
+    "message": "Télécharger en JPG"
+  },
+  "pdfTitle": {
+    "message": "Télécharger en PDF"
+  },
+  "cropApply": {
+    "message": "✓ Recadrer"
+  },
+  "cropCancel": {
+    "message": "Annuler (Échap)"
+  },
+  "toastOriginalRestored": {
+    "message": "Image originale restaurée (Ctrl+Z pour annuler)"
+  },
+  "toastPdfGenerating": {
+    "message": "Génération du PDF…"
+  },
+  "toastPdfReady": {
+    "message": "PDF prêt"
+  },
+  "toastCopied": {
+    "message": "Image copiée dans le presse-papiers"
+  },
+  "toastCopyFailed": {
+    "message": "Copie impossible : $1"
+  },
+  "toastError": {
+    "message": "Erreur : $1"
+  },
+  "encodeFailed": {
+    "message": "Encodage impossible"
+  },
+  "notFound": {
+    "message": "Capture introuvable (seules les 10 dernières sont conservées)."
+  },
+  "untitled": {
+    "message": "Sans titre"
+  },
+  "loadError": {
+    "message": "Erreur de chargement : $1"
+  },
+  "partLabel": {
+    "message": "Partie $1"
+  },
+  "partSuffix": {
+    "message": "partie"
+  },
+  "noticeSplit": {
+    "message": "La page est trop haute pour une seule image : elle a été découpée en $1 parties."
+  },
+  "noticeTruncated": {
+    "message": "La page était extrêmement longue : la capture a été tronquée."
+  }
+}

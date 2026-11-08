@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="fr">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Capture – FX Full Page</title>
+  <title>FX Full Page</title>
   <link rel="icon" href="icons/icon32.png">
   <link rel="stylesheet" href="editor.css">
   <script type="module" src="editor.js"></script>
@@ -10,28 +10,28 @@
 <body>
   <header class="toolbar">
     <div class="meta">
-      <div id="title" class="title">Chargement…</div>
+      <div id="title" class="title" data-i18n="loading"></div>
       <a id="source" class="source" target="_blank" rel="noopener"></a>
     </div>
 
-    <div class="group" role="group" aria-label="Outils">
-      <button class="tool active" data-tool="crop" title="Recadrer (C)">✂ Recadrer</button>
-      <button class="tool" data-tool="box" title="Encadrer (R)">▭ Encadré</button>
-      <button class="tool" data-tool="pixelate" title="Flouter / masquer (B)">▦ Flouter</button>
-      <input id="color" type="color" value="#ef4444" title="Couleur de l'encadré">
+    <div class="group" role="group" data-i18n-aria-label="toolsGroup">
+      <button class="tool active" data-tool="crop" data-i18n="toolCrop" data-i18n-title="toolCropTitle"></button>
+      <button class="tool" data-tool="box" data-i18n="toolBox" data-i18n-title="toolBoxTitle"></button>
+      <button class="tool" data-tool="pixelate" data-i18n="toolPixelate" data-i18n-title="toolPixelateTitle"></button>
+      <input id="color" type="color" value="#ef4444" data-i18n-title="colorTitle">
     </div>
 
     <div class="group">
-      <button id="undo" title="Annuler (Ctrl+Z)" disabled>↶ Annuler</button>
-      <button id="reset" title="Revenir à l'original">⟲ Original</button>
-      <button id="zoom" title="Basculer entre ajusté et taille réelle (Z)">Taille réelle</button>
+      <button id="undo" data-i18n="undo" data-i18n-title="undoTitle" disabled></button>
+      <button id="reset" data-i18n="reset" data-i18n-title="resetTitle"></button>
+      <button id="zoom" data-i18n="zoomActual" data-i18n-title="zoomTitle"></button>
     </div>
 
     <div class="group">
-      <button id="copy" title="Copier dans le presse-papiers (Ctrl+C)">⧉ Copier</button>
-      <button id="dl-png" class="primary" title="Télécharger en PNG (Ctrl+S)">PNG</button>
-      <button id="dl-jpg" class="primary">JPG</button>
-      <button id="dl-pdf" class="primary">PDF</button>
+      <button id="copy" data-i18n="copy" data-i18n-title="copyTitle"></button>
+      <button id="dl-png" class="primary" data-i18n-title="pngTitle">PNG</button>
+      <button id="dl-jpg" class="primary" data-i18n-title="jpgTitle">JPG</button>
+      <button id="dl-pdf" class="primary" data-i18n-title="pdfTitle">PDF</button>
     </div>
   </header>
 
@@ -44,8 +44,8 @@
         <span id="sel-size" class="sel-size"></span>
       </div>
       <div id="crop-actions" class="crop-actions" hidden>
-        <button id="crop-apply" class="primary">✓ Recadrer</button>
-        <button id="crop-cancel">✕</button>
+        <button id="crop-apply" class="primary" data-i18n="cropApply"></button>
+        <button id="crop-cancel" data-i18n-title="cropCancel">✕</button>
       </div>
     </div>
   </main>
