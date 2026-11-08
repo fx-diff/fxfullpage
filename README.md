@@ -1,6 +1,31 @@
 # FX Full Page Screenshot
 
-A browser extension (Manifest V3) for **Chrome**, **Edge** and **Firefox** that captures an entire web page and opens it in a built-in editor.
+**Screenshot the entire page — top to bottom — in one click.** Then crop it, highlight what matters,
+blur what's private, and export it as PNG, JPG or PDF. No account, no tracking: everything stays on
+your computer.
+
+![FX Full Page Screenshot demo: capture, crop, highlight, blur and export](docs/demo.gif)
+
+## Install
+
+| Browser | Store |
+|---|---|
+| Chrome, Brave, Opera, Vivaldi | [Chrome Web Store](https://chromewebstore.google.com/detail/gcgmabhlaegopkahoagdhcchbajfccad) |
+| Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/fx-full-page-screenshot/) |
+| Microsoft Edge | Microsoft Edge Add-ons (link coming soon) |
+
+Or download a package from the [latest release](https://github.com/fx-diff/fxfullpage/releases/latest).
+
+## Features
+
+- One-click full page capture (toolbar icon or **Alt+Shift+P**)
+- Works on long pages and on web apps with their own scrolling area
+- Sticky headers and cookie banners show up once, not on every screen
+- Extra-long pages are split automatically into several images
+- Editor: crop, colored boxes, blur/pixelate, undo
+- Export to PNG, JPG or multi-page PDF, or copy to the clipboard
+- English and French interface
+- Private by design: no network requests, minimal permissions (`activeTab`, `scripting`)
 
 ## Installation (development)
 
