@@ -3,7 +3,9 @@
 ## General info
 - **Category**: Tools (or Productivity)
 - **Primary language**: English (French is included via `_locales/fr`)
-- **Website / support**: https://github.com/fx-diff/fxfullpage
+- **Homepage URL**: https://github.com/fx-diff/fxfullpage
+- **Support URL**: https://github.com/fx-diff/fxfullpage/issues
+- **Official URL**: leave empty (requires a domain verified in Google Search Console)
 - **Privacy policy URL**: https://github.com/fx-diff/fxfullpage/blob/main/PRIVACY.md
 
 ---
@@ -72,7 +74,8 @@ Tick all three certifications:
 
 ## Images (`store/` folder)
 - `icon-128.png` – store icon (128×128, artwork 96×96 with 16 px transparent padding)
-- `screenshot-1.png` … `screenshot-3.png` – international (English) screenshots, 1280×800
-- `screenshot-1-fr.png` … `screenshot-3-fr.png` – localized French screenshots, 1280×800
+- `screenshot-1.png` … `screenshot-5.png` – international (English) screenshots, 1280×800, upload in order
+- `screenshot-1-fr.png` … `screenshot-5-fr.png` – localized French screenshots, 1280×800, upload in order
+  1. overview · 2. crop · 3. box + blur · 4. how it works · 5. result + copy
 - `promo-small.png` – small promo tile, 440×280
 - `marquee.png` – marquee promo tile, 1400×560
