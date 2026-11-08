@@ -1,6 +1,6 @@
 # FX Full Page Screenshot
 
-A browser extension (Manifest V3) for **Chrome** and **Firefox** that captures an entire web page and opens it in a built-in editor.
+A browser extension (Manifest V3) for **Chrome**, **Edge** and **Firefox** that captures an entire web page and opens it in a built-in editor.
 
 ## Installation (development)
 
@@ -60,11 +60,12 @@ The UI is in English (default) and French, depending on the Chrome language. Str
 
 ## Building and publishing
 
-`./scripts/package.sh` builds both packages from the same source (or pass `chrome` / `firefox`):
+`./scripts/package.sh` builds every package from the same source (or pass `chrome`, `firefox` or `edge`):
 
 | Target | Unpacked build | Package to upload | Store |
 |---|---|---|---|
-| Chrome | `dist/chrome/` | `dist/fxfullpage-chrome-<version>.zip` | Chrome Web Store (also works for Microsoft Edge Add-ons) |
+| Chrome | `dist/chrome/` | `dist/fxfullpage-chrome-<version>.zip` | Chrome Web Store |
+| Edge | `dist/edge/` | `dist/fxfullpage-edge-<version>.zip` | Microsoft Edge Add-ons (same files as Chrome) |
 | Firefox | `dist/firefox/` | `dist/fxfullpage-firefox-<version>.zip` | addons.mozilla.org (AMO) |
 
 `manifest.json` is the Chrome manifest. The Firefox manifest is generated from it: a background
@@ -74,7 +75,7 @@ no `gecko_android` key, so the add-on is not marked as compatible with Firefox f
 
 - Bump `version` in `manifest.json` before every new submission.
 - Validate the Firefox build with `cd dist/firefox && npx web-ext lint`.
-- Listing copy and images: `store/LISTING.md` (Chrome Web Store), `store/AMO.md` (Firefox).
+- Listing copy and images: `store/LISTING.md` (Chrome Web Store), `store/EDGE.md` (Edge), `store/AMO.md` (Firefox).
 - Privacy policy: `PRIVACY.md`.
 
 ## Known limitations

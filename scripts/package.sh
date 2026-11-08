@@ -4,8 +4,10 @@
 #   ./scripts/package.sh            # both browsers
 #   ./scripts/package.sh chrome     # dist/chrome/  + dist/fxfullpage-chrome-<version>.zip
 #   ./scripts/package.sh firefox    # dist/firefox/ + dist/fxfullpage-firefox-<version>.zip
+#   ./scripts/package.sh edge       # dist/edge/    + dist/fxfullpage-edge-<version>.zip
 #
 # manifest.json is the Chrome manifest (and what "Load unpacked" uses during development).
+# Edge uses the Chrome manifest unchanged; it only gets its own, clearly named package.
 # The Firefox manifest is derived from it: event-page background script instead of a
 # service worker, plus the Gecko-specific settings required by addons.mozilla.org.
 set -euo pipefail
@@ -17,7 +19,7 @@ GECKO_ID="fx-full-page-screenshot@fx-diff"
 # No "gecko_android" key: it would mark the add-on as Android-compatible on AMO.
 GECKO_MIN_VERSION="142.0"
 
-targets=("${@:-chrome firefox}")
+targets=("${@:-chrome firefox edge}")
 read -r -a targets <<< "${targets[*]}"
 
 for f in manifest.json "${FILES[@]}"; do [ -e "$f" ] || { echo "Missing file: $f" >&2; exit 1; }; done
@@ -56,7 +58,7 @@ PY
 
 for t in "${targets[@]}"; do
   case "$t" in
-    chrome|firefox) build "$t" ;;
-    *) echo "Unknown target: $t (use chrome or firefox)" >&2; exit 1 ;;
+    chrome|firefox|edge) build "$t" ;;
+    *) echo "Unknown target: $t (use chrome, firefox or edge)" >&2; exit 1 ;;
   esac
 done
