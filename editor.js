@@ -28,6 +28,8 @@ const ui = {
   overlay: $('#overlay'),
   arrowPreview: $('#arrow-preview'),
   textInput: $('#text-input'),
+  review: $('#review'),
+  reviewLeave: $('#review-leave'),
   toast: $('#toast'),
 };
 
@@ -510,6 +512,7 @@ async function exportImages(type, ext) {
     const suffix = parts.length > 1 ? `-${t('partSuffix')}${i + 1}` : '';
     download(blob, `${base}${suffix}.${ext}`);
   }
+  recordExport();
 }
 
 async function exportPdf() {
@@ -517,6 +520,7 @@ async function exportPdf() {
   const blob = await buildPdf(parts.map((p) => p.canvas), { stamp: stampText() });
   download(blob, `${baseFilename()}.pdf`);
   toast(t('toastPdfReady'));
+  recordExport();
 }
 
 async function copyToClipboard() {
@@ -531,11 +535,48 @@ async function copyToClipboard() {
     }
     await navigator.clipboard.write([item]);
     toast(t('toastCopied'));
+    recordExport();
   } catch (err) {
     console.error(err);
     toast(t('toastCopyFailed', err.message));
   }
 }
+
+// ---------- Review prompt ----------
+// Shown once, after the 5th successful export. Only a local counter is kept; nothing is sent.
+
+const REVIEW_AFTER = 5;
+const STORE_REVIEW_URLS = {
+  chrome: 'https://chromewebstore.google.com/detail/gcgmabhlaegopkahoagdhcchbajfccad/reviews',
+  firefox: 'https://addons.mozilla.org/firefox/addon/fx-full-page-screenshot/reviews/',
+  edge: 'https://microsoftedge.microsoft.com/addons/detail/fx-full-page-screenshot/foikpalfpkacclejmjhmchjdbiiedchl',
+};
+
+function storeReviewUrl() {
+  if (location.protocol === 'moz-extension:') return STORE_REVIEW_URLS.firefox;
+  if (navigator.userAgent.includes('Edg/')) return STORE_REVIEW_URLS.edge;
+  return STORE_REVIEW_URLS.chrome;
+}
+
+function closeReviewPrompt() {
+  ui.review.hidden = true;
+  try { localStorage.setItem('fxfp.reviewPrompt', 'done'); } catch { /* storage unavailable */ }
+}
+
+function recordExport() {
+  try {
+    if (localStorage.getItem('fxfp.reviewPrompt') === 'done') return;
+    const count = (parseInt(localStorage.getItem('fxfp.exports'), 10) || 0) + 1;
+    localStorage.setItem('fxfp.exports', String(count));
+    if (count >= REVIEW_AFTER) {
+      ui.reviewLeave.href = storeReviewUrl();
+      ui.review.hidden = false;
+    }
+  } catch { /* storage unavailable: never prompt */ }
+}
+
+ui.reviewLeave.addEventListener('click', closeReviewPrompt);
+$('#review-dismiss').addEventListener('click', closeReviewPrompt);
 
 function guard(fn) {
   return async (...args) => {

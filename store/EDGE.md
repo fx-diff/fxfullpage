@@ -1,6 +1,7 @@
 # Microsoft Edge Add-ons listing – copy-paste text
 
 Partner Center: https://partner.microsoft.com/dashboard/microsoftedge/overview
+Public listing: https://microsoftedge.microsoft.com/addons/detail/fx-full-page-screenshot/foikpalfpkacclejmjhmchjdbiiedchl
 Package: `dist/fxfullpage-edge-<version>.zip` (identical to the Chrome build).
 
 ## Availability

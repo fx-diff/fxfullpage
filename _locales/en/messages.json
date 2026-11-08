@@ -166,5 +166,14 @@
   },
   "stampTitle": {
     "message": "Add the page URL and the capture date to exports"
+  },
+  "reviewAsk": {
+    "message": "Enjoying FX Full Page Screenshot? A quick review helps a lot."
+  },
+  "reviewLeave": {
+    "message": "Leave a review"
+  },
+  "reviewNoThanks": {
+    "message": "No thanks"
   }
 }

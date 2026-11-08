@@ -14,7 +14,7 @@ your computer.
 |---|---|
 | Chrome, Brave, Opera, Vivaldi | [Chrome Web Store](https://chromewebstore.google.com/detail/gcgmabhlaegopkahoagdhcchbajfccad) |
 | Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/fx-full-page-screenshot/) |
-| Microsoft Edge | Microsoft Edge Add-ons (link coming soon) |
+| Microsoft Edge | [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/fx-full-page-screenshot/foikpalfpkacclejmjhmchjdbiiedchl) |
 
 Or download a package from the [latest release](https://github.com/fx-diff/fxfullpage/releases/latest).
 
