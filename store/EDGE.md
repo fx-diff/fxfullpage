@@ -72,9 +72,9 @@ Capturez la page entière — de haut en bas — en un clic. Recadrez, mettez en
 Gratuit et open source (MIT) — https://github.com/fx-diff/fxfullpage
 ```
 
-**Search terms** (21 words max in total)
-- English: `full page screenshot`, `screen capture`, `scrolling screenshot`, `crop`, `annotate`, `blur`, `pdf`
-- French: `capture pleine page`, `capture d'écran`, `screenshot`, `recadrer`, `flouter`, `pdf`
+**Search terms** (max 7 terms, 30 characters each, 21 words in total)
+- English (17 words): `full page screenshot`, `screen capture`, `scrolling screenshot`, `capture entire page`, `webpage to pdf`, `screenshot editor`, `blur screenshot`
+- French (18 words): `capture d'écran pleine page`, `capture d'écran`, `capture page web`, `page web en pdf`, `screenshot`, `recadrer capture`, `flouter capture`
 
 **Images** (`store/` folder; same files for both languages, French screenshots for the French listing)
 - Extension store logo (300×300): `logo-300.png`
