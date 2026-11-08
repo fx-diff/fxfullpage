@@ -6,6 +6,8 @@ your computer.
 
 ![FX Full Page Screenshot demo: capture, crop, highlight, blur and export](docs/demo.gif)
 
+▶️ [Watch the 25-second demo on YouTube](https://www.youtube.com/watch?v=djICF5qt5hs)
+
 ## Install
 
 | Browser | Store |

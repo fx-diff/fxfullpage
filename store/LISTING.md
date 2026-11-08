@@ -7,6 +7,7 @@
 - **Support URL**: https://github.com/fx-diff/fxfullpage/issues
 - **Official URL**: leave empty (requires a domain verified in Google Search Console)
 - **Privacy policy URL**: https://github.com/fx-diff/fxfullpage/blob/main/PRIVACY.md
+- **Promo video (global + localized)**: https://www.youtube.com/watch?v=djICF5qt5hs
 
 ---
 

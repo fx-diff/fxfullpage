@@ -81,7 +81,7 @@ Gratuit et open source (MIT) — https://github.com/fx-diff/fxfullpage
 - Small promotional tile (440×280): `promo-small.png`
 - Large promotional tile (1400×560): `marquee.png`
 - Screenshots (1280×800): `screenshot-1.png` … `screenshot-5.png` (English), `screenshot-1-fr.png` … `screenshot-5-fr.png` (French)
-- YouTube video: leave empty
+- YouTube video URL: https://www.youtube.com/watch?v=djICF5qt5hs
 
 ## Submission questions
 - **Does the extension access, collect or transmit personal information?** No. All processing is local;

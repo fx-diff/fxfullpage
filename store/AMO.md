@@ -39,6 +39,9 @@ Capture an entire web page — not just what's on screen — in one click, then 
 
 Free and open source (MIT license): https://github.com/fx-diff/fxfullpage
 
+## Video
+AMO has no video field: the description can link to https://www.youtube.com/watch?v=djICF5qt5hs
+
 ## Notes to reviewer
 
 > No build step: the uploaded files are the original sources (https://github.com/fx-diff/fxfullpage).
