@@ -1,8 +1,8 @@
 import { newCaptureId, saveCapture } from './db.js';
 
-// Chrome limite captureVisibleTab à 2 appels/seconde.
+// Chrome limits captureVisibleTab to 2 calls per second.
 const MIN_CAPTURE_INTERVAL_MS = 550;
-// Limites des canvas Chrome : 32 767 px de côté, ~268 Mpx de surface.
+// Chrome canvas limits: 32,767 px per side, ~268 Mpx of area.
 const MAX_PART_DIM = 32000;
 const MAX_PART_AREA = 200_000_000;
 const MAX_FRAMES = 400;
@@ -23,7 +23,7 @@ async function setBadge(tabId, text, color = '#2563eb') {
   try {
     await chrome.action.setBadgeBackgroundColor({ tabId, color });
     await chrome.action.setBadgeText({ tabId, text });
-  } catch { /* onglet fermé */ }
+  } catch { /* tab closed */ }
 }
 
 async function throttledCapture(windowId) {

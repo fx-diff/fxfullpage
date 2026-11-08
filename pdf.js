@@ -1,4 +1,4 @@
-// Générateur PDF minimal : chaque page contient une tranche JPEG de l'image.
+// Minimal PDF writer: each page holds one JPEG slice of the image.
 const A4_WIDTH_PT = 595.28;
 
 async function slicesToJpeg(canvases, pageRatio, quality) {

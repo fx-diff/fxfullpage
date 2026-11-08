@@ -1,4 +1,4 @@
-// Stockage des captures dans IndexedDB (partagé entre le service worker et l'éditeur).
+// Capture storage in IndexedDB (shared by the service worker and the editor).
 const DB_NAME = 'fxfullpage';
 const STORE = 'captures';
 const KEEP_LAST = 10;
@@ -20,7 +20,7 @@ function reqToPromise(req) {
 }
 
 export function newCaptureId() {
-  // Préfixe horodaté : l'ordre lexicographique des clés = ordre chronologique.
+  // Timestamp prefix: lexicographic key order = chronological order.
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 

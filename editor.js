@@ -31,10 +31,10 @@ let parts = []; // { canvas, history: HTMLCanvasElement[] }
 let current = 0;
 let tool = 'crop';
 let actualSize = false;
-let selection = null; // en pixels du canvas { x, y, w, h }
+let selection = null; // in canvas pixels { x, y, w, h }
 let drag = null;
 
-// ---------- Utilitaires ----------
+// ---------- Utilities ----------
 
 function cloneCanvas(src) {
   const c = document.createElement('canvas');
@@ -57,7 +57,7 @@ async function blobToCanvas(blob) {
 function canvasToBlob(canvas, type, quality) {
   return new Promise((resolve, reject) => {
     if (type === 'image/jpeg') {
-      // Le JPEG n'a pas de transparence : fond blanc.
+      // JPEG has no transparency: use a white background.
       const flat = document.createElement('canvas');
       flat.width = canvas.width;
       flat.height = canvas.height;
@@ -99,7 +99,7 @@ function download(blob, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
-// ---------- Affichage ----------
+// ---------- Display ----------
 
 function activeCanvas() {
   return parts[current].canvas;
@@ -134,7 +134,7 @@ function setTool(name) {
   clearSelection();
 }
 
-// ---------- Sélection ----------
+// ---------- Selection ----------
 
 function cssScale() {
   const c = activeCanvas();
@@ -161,7 +161,7 @@ function renderSelection() {
   const showActions = tool === 'crop' && !drag && w > 2 && h > 2;
   ui.cropActions.hidden = !showActions;
   if (showActions) {
-    // Sous la sélection, sauf si cela sort de la fenêtre ou de l'image : alors à l'intérieur.
+    // Below the selection, unless that falls outside the window or the image: then inside it.
     const wrapRect = ui.wrap.getBoundingClientRect();
     const bottom = (y + h) * k;
     const outside = bottom + 40 > wrapRect.height || wrapRect.top + bottom + 50 > window.innerHeight;
@@ -198,7 +198,7 @@ function updateDragSelection() {
   renderSelection();
 }
 
-// Défilement automatique quand on tire la sélection vers le bord de la fenêtre.
+// Auto-scroll while dragging the selection toward the window edge.
 function autoScrollLoop() {
   if (!drag) return;
   const edge = 40;
@@ -242,7 +242,7 @@ function endDrag() {
 ui.wrap.addEventListener('pointerup', endDrag);
 ui.wrap.addEventListener('pointercancel', endDrag);
 
-// ---------- Opérations ----------
+// ---------- Operations ----------
 
 function pushHistory() {
   const part = parts[current];
@@ -363,7 +363,7 @@ function guard(fn) {
   };
 }
 
-// ---------- Câblage ----------
+// ---------- Wiring ----------
 
 document.querySelectorAll('.tool').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool)));
 $('#crop-apply').addEventListener('click', applyCrop);
@@ -393,7 +393,7 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'z') { actualSize = !actualSize; applyCanvasSize(); }
 });
 
-// ---------- Chargement ----------
+// ---------- Loading ----------
 
 async function init() {
   const id = new URLSearchParams(location.search).get('id');

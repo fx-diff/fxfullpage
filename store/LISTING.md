@@ -1,10 +1,10 @@
-# Fiche Chrome Web Store – textes à copier-coller
+# Chrome Web Store listing – copy-paste text
 
-## Infos générales
-- **Catégorie** : Outils (Tools) — ou « Productivité »
-- **Langue principale** : English (le français est inclus via `_locales/fr`)
-- **Site web / assistance** : https://github.com/fx-diff/fxfullpage
-- **Règles de confidentialité (URL)** : https://github.com/fx-diff/fxfullpage/blob/main/PRIVACY.md
+## General info
+- **Category**: Tools (or Productivity)
+- **Primary language**: English (French is included via `_locales/fr`)
+- **Website / support**: https://github.com/fx-diff/fxfullpage
+- **Privacy policy URL**: https://github.com/fx-diff/fxfullpage/blob/main/PRIVACY.md
 
 ---
 
@@ -27,7 +27,7 @@ PRIVACY
 
 Free and open source (MIT license): https://github.com/fx-diff/fxfullpage
 
-## Description (Français)
+## Description (French – for the localized `fr` listing)
 
 Capturez une page web entière — pas seulement la partie visible — en un clic, puis recadrez-la, annotez-la et exportez-la.
 
@@ -48,9 +48,9 @@ Gratuit et open source (licence MIT) : https://github.com/fx-diff/fxfullpage
 
 ---
 
-## Onglet « Pratiques de confidentialité »
+## "Privacy practices" tab
 
-**Objectif unique (Single purpose)**
+**Single purpose**
 > Capture a full-page screenshot of the current tab and let the user crop, annotate and export it.
 
 **Justification – activeTab**
@@ -59,18 +59,18 @@ Gratuit et open source (licence MIT) : https://github.com/fx-diff/fxfullpage
 **Justification – scripting**
 > Injects a script into the active tab, only when the user starts a capture, to measure the page, scroll it step by step during the capture, temporarily hide fixed elements and scrollbars, then restore the page to its original state.
 
-**Code distant (Remote code)**
+**Remote code**
 > No, I am not using remote code. All JavaScript is included in the package.
 
-**Données utilisateur** : ne cocher **aucune** catégorie de données collectées.
-Cocher les trois certifications :
+**User data**: do **not** tick any collected data category.
+Tick all three certifications:
 - I do not sell or transfer user data to third parties, outside of the approved use cases
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose
 - I do not use or transfer user data to determine creditworthiness or for lending purposes
 
 ---
 
-## Visuels (dossier `store/`)
-- `icon-128.png` – icône de la fiche (128×128)
-- `screenshot-1.png` … – captures d'écran 1280×800
-- `promo-small.png` – petite vignette promotionnelle 440×280
+## Images (`store/` folder)
+- `icon-128.png` – store icon (128×128)
+- `screenshot-1.png` … `screenshot-3.png` – screenshots (1280×800)
+- `promo-small.png` – small promo tile (440×280)

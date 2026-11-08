@@ -1,63 +1,66 @@
 # FX Full Page
 
-Extension Chrome (Manifest V3) qui capture une page web entière, puis l'ouvre dans un éditeur.
+A Chrome extension (Manifest V3) that captures an entire web page and opens it in a built-in editor.
 
-## Installation
+## Installation (development)
 
-1. Ouvrir `chrome://extensions`
-2. Activer le **Mode développeur** (en haut à droite)
-3. **Charger l'extension non empaquetée** → sélectionner ce dossier
-4. (Optionnel) épingler l'icône dans la barre d'outils
+1. Open `chrome://extensions`
+2. Turn on **Developer mode** (top right)
+3. Click **Load unpacked** and select this folder
+4. (Optional) Pin the icon to the toolbar
 
-## Utilisation
+> After changing `manifest.json` or anything in `_locales/`, click the reload button ↻ on the extension card.
+> Chrome reads JS/HTML files from disk live, but only reads the manifest and translations when the extension is loaded.
 
-- Cliquer sur l'icône, ou **Alt+Shift+P** (modifiable dans `chrome://extensions/shortcuts`).
-- La progression s'affiche sur l'icône (badge %). Ne pas changer d'onglet pendant la capture.
-- L'éditeur s'ouvre dans un nouvel onglet :
+## Usage
 
-| Action | Raccourci |
+- Click the icon, or press **Alt+Shift+P** (configurable in `chrome://extensions/shortcuts`).
+- Progress is shown on the icon badge (%). Do not switch tabs during the capture.
+- The editor opens in a new tab:
+
+| Action | Shortcut |
 |---|---|
-| Recadrer (tracer une zone, puis Entrée ou ✓) | `C` |
-| Encadré de couleur | `R` |
-| Flouter / pixeliser une zone | `B` |
-| Annuler | `Ctrl+Z` |
-| Ajusté / taille réelle | `Z` |
-| Copier dans le presse-papiers | `Ctrl+C` |
-| Télécharger en PNG | `Ctrl+S` |
-| Annuler la sélection | `Échap` |
+| Crop (draw an area, then Enter or ✓) | `C` |
+| Colored box | `R` |
+| Blur / pixelate an area | `B` |
+| Undo | `Ctrl+Z` |
+| Fit / actual size | `Z` |
+| Copy to clipboard | `Ctrl+C` |
+| Download as PNG | `Ctrl+S` |
+| Clear the selection | `Esc` |
 
-Exports : PNG, JPG, PDF (pages au format A4, largeur de la capture).
+Exports: PNG, JPG, PDF (A4 pages, using the width of the capture).
 
-## Fonctionnement
+## How it works
 
-- `background.js` : fait défiler la page par pas d'un écran, appelle `chrome.tabs.captureVisibleTab`
-  (limité à 2 appels/s) et assemble les images dans un `OffscreenCanvas`.
-- `capture-page.js` : injecté dans la page ; masque les barres de défilement, remet les éléments
-  `sticky` dans le flux, cache les éléments `fixed` après la première image (évite les en-têtes répétés),
-  puis restaure tout à la fin. Si le document ne défile pas (Gmail, Notion…), il capture le plus grand
-  conteneur défilant.
-- Pages très hautes : découpées en plusieurs images (limite des canvas Chrome ~32 000 px).
-- `db.js` : les 10 dernières captures sont conservées dans IndexedDB.
-- `editor.*` : éditeur (le bouton ✓ reste visible même pour une grande sélection) ; `pdf.js` : petit générateur PDF sans dépendance.
+- `background.js` scrolls the page one screen at a time, calls `chrome.tabs.captureVisibleTab`
+  (limited to 2 calls per second) and stitches the frames into an `OffscreenCanvas`.
+- `capture-page.js` is injected into the page. It hides scrollbars, puts `sticky` elements back into
+  the normal flow, hides `fixed` elements after the first frame (so headers are not repeated), and
+  restores everything at the end. If the document itself does not scroll (Gmail, Notion…), it captures
+  the largest scrollable container instead.
+- Very tall pages are split into several images (Chrome canvas limit is about 32,000 px).
+- `db.js` keeps the 10 most recent captures in IndexedDB.
+- `editor.*` is the editor; `pdf.js` is a small dependency-free PDF writer.
 
-## Langues
+## Languages
 
-Interface en anglais (par défaut) et en français, selon la langue de Chrome. Les textes sont dans
-`_locales/<langue>/messages.json`.
+The UI is in English (default) and French, depending on the Chrome language. Strings live in
+`_locales/<language>/messages.json`.
 
-## Publication sur le Chrome Web Store
+## Publishing to the Chrome Web Store
 
-- `./scripts/package.sh` génère `dist/fxfullpage-<version>.zip`, prêt à envoyer.
-- Penser à incrémenter `version` dans `manifest.json` à chaque nouvelle soumission.
-- Textes de la fiche, justifications des permissions et visuels : dossier `store/` (voir `store/LISTING.md`).
-- Règles de confidentialité : `PRIVACY.md`.
+- `./scripts/package.sh` builds `dist/fxfullpage-<version>.zip`, ready to upload.
+- Bump `version` in `manifest.json` before every new submission.
+- Store listing copy, permission justifications and images are in `store/` (see `store/LISTING.md`).
+- Privacy policy: `PRIVACY.md`.
 
-## Limites connues
+## Known limitations
 
-- Impossible de capturer les pages `chrome://`, le Chrome Web Store et les visionneuses PDF (restriction Chrome).
-- Les pages qui chargent du contenu à l'infini sont capturées selon leur hauteur au début de la capture.
-- Les contenus animés au défilement peuvent produire des raccords visibles.
+- Chrome does not allow capturing `chrome://` pages, the Chrome Web Store or the built-in PDF viewer.
+- Infinite-scroll pages are captured at the height they had when the capture started.
+- Scroll-triggered animations can leave visible seams.
 
-## Licence
+## License
 
 [MIT](LICENSE) © 2026 Francois-Xavier Degroot

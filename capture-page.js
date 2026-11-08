@@ -1,4 +1,4 @@
-// Injecté dans la page à capturer. Expose window.__fxfp (monde isolé de l'extension).
+// Injected into the page being captured. Exposes window.__fxfp (extension isolated world).
 (() => {
   if (window.__fxfp) return;
 
@@ -7,7 +7,7 @@
 
   const nextFrame = () =>
     new Promise((resolve) => {
-      // rAF ne se déclenche pas si l'onglet est masqué : on borne par un timeout.
+      // rAF does not fire while the tab is hidden: cap the wait with a timeout.
       const t = setTimeout(resolve, 300);
       requestAnimationFrame(() => requestAnimationFrame(() => { clearTimeout(t); resolve(); }));
     });
@@ -28,8 +28,8 @@
     return h > de.clientHeight + 2 || w > de.clientWidth + 2;
   }
 
-  // Si le document lui-même ne défile pas (apps type Gmail, Notion…), on cherche
-  // le plus grand élément défilant visible.
+  // If the document itself does not scroll (apps like Gmail or Notion),
+  // look for the largest visible scrollable element.
   function findInnerScroller() {
     let best = null;
     let bestArea = 0;
@@ -93,7 +93,7 @@
       style: document.createElement('style'),
     };
 
-    // Masque les barres de défilement et désactive le défilement doux.
+    // Hide scrollbars and disable smooth scrolling.
     state.style.textContent =
       'html{scrollbar-width:none!important;scroll-behavior:auto!important}' +
       'html::-webkit-scrollbar{display:none!important}';
@@ -104,7 +104,7 @@
       if (pos === 'fixed') {
         state.fixed.push(el);
       } else if (pos === 'sticky') {
-        // Les éléments « collants » reprennent leur place naturelle dans le flux.
+        // Sticky elements go back to their natural place in the flow.
         setInline(el, 'position', 'relative');
         setInline(el, 'inset', 'auto');
       }
@@ -148,7 +148,7 @@
     const sc = state.scroller;
     if (sc) { sc.scrollLeft = x; sc.scrollTop = y; }
     else window.scrollTo(x, y);
-    // Les éléments fixes (en-têtes, bandeaux) n'apparaissent que sur la première image.
+    // Fixed elements (headers, banners) only appear on the first frame.
     setFixedHidden(hideFixed);
     await nextFrame();
     await sleep(SETTLE_MS);
