@@ -1,12 +1,12 @@
-# FX Full Page – Privacy Policy
+# FX Full Page Screenshot – Privacy Policy
 
 _Last updated: November 8, 2026_
 
-FX Full Page is a browser extension that captures a full-page screenshot of the current tab and lets you edit it.
+FX Full Page Screenshot is a browser extension that captures a full-page screenshot of the current tab and lets you edit it.
 
 ## Data collection
 
-**FX Full Page does not collect, transmit, sell or share any personal data.**
+**FX Full Page Screenshot does not collect, transmit, sell or share any personal data.**
 
 - Screenshots are created locally in your browser and stored only on your device (in the extension's IndexedDB storage). Only the 10 most recent captures are kept; older ones are deleted automatically.
 - Each stored capture contains the image, the page title and the page URL, so they can be shown in the editor. This information never leaves your device.

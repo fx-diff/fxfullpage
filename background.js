@@ -11,7 +11,7 @@ const busyTabs = new Set();
 let lastCaptureAt = 0;
 
 chrome.action.onClicked.addListener((tab) => {
-  captureTab(tab).catch((err) => console.error('[FX Full Page]', err));
+  captureTab(tab).catch((err) => console.error('[FX Full Page Screenshot]', err));
 });
 
 async function run(tabId, func, args = []) {
@@ -141,7 +141,7 @@ async function captureTab(tab) {
       openerTabId: tabId,
     });
   } catch (err) {
-    console.error('[FX Full Page]', err);
+    console.error('[FX Full Page Screenshot]', err);
     await setBadge(tabId, '!', '#dc2626');
     try {
       await chrome.action.setTitle({ tabId, title: chrome.i18n.getMessage('errCaptureFailed', [err.message]) });

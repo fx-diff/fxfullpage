@@ -1,4 +1,4 @@
-# FX Full Page
+# FX Full Page Screenshot
 
 A Chrome extension (Manifest V3) that captures an entire web page and opens it in a built-in editor.
 

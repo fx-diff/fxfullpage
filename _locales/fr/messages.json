@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "FX Full Page"
+    "message": "FX Full Page Screenshot"
   },
   "extDescription": {
     "message": "Captures d'écran pleine page avec éditeur intégré : recadrage, encadré, floutage, export PNG, JPG ou PDF."
@@ -15,7 +15,7 @@
     "message": "Échec de la capture : $1"
   },
   "editorTitle": {
-    "message": "Capture – FX Full Page"
+    "message": "Capture – FX Full Page Screenshot"
   },
   "editorTitleFor": {
     "message": "Capture – $1"

@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "FX Full Page"
+    "message": "FX Full Page Screenshot"
   },
   "extDescription": {
     "message": "Full page screenshots with a built-in editor: crop, highlight, blur, export to PNG, JPG or PDF."
@@ -15,7 +15,7 @@
     "message": "Capture failed: $1"
   },
   "editorTitle": {
-    "message": "Capture – FX Full Page"
+    "message": "Capture – FX Full Page Screenshot"
   },
   "editorTitleFor": {
     "message": "Capture – $1"
