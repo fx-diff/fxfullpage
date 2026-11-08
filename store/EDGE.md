@@ -104,5 +104,7 @@ No build step: the uploaded files are the original, unminified sources (https://
 
 To test: open any long page and click the toolbar icon (or press Alt+Shift+S). The page scrolls while it is captured, then the editor opens in a new tab with crop, box, arrow, text and blur tools, and PNG, JPG and PDF export. Right-click the toolbar icon for visible-area and selected-area capture (Alt+Shift+V, Alt+Shift+A).
 
-Permissions: activeTab (Required to capture the content of the tab the user explicitly invokes the extension on (toolbar icon, its right-click menu, or a keyboard shortcut), using chrome.tabs.captureVisibleTab.) scripting (Injects scripts into the active tab, only when the user starts a capture: to measure the page, scroll it step by step during a full-page capture, temporarily hide fixed elements and scrollbars, then restore the page; or to show the overlay that lets the user drag the area to capture. The overlay is removed before the capture.) contextMenus (Adds three entries to the right-click menu of the extension's own toolbar icon: Capture the full page, Capture the visible area, Select an area to capture. No other context menu is added.) No network requests are made; captures are stored locally in IndexedDB (last 10 only).
+Permissions: activeTab to capture the tab the user invokes the extension on; scripting to scroll the page during a full-page capture (then restore it) or to show the area-selection overlay; contextMenus for the capture options in the toolbar icon's right-click menu.
+
+No network requests are made. Captures are stored locally in IndexedDB (last 10 only). After the 5th export, the editor shows a one-time, dismissible invitation to review the extension on this store; only a local counter is kept.
 ```
