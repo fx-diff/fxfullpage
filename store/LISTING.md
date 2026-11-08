@@ -4,7 +4,7 @@
 - **Catégorie** : Outils (Tools) — ou « Productivité »
 - **Langue principale** : English (le français est inclus via `_locales/fr`)
 - **Site web / assistance** : https://github.com/fx-diff/fxfullpage
-- **Règles de confidentialité (URL)** : voir l'étape « hébergement » dans la réponse de Claude / `PRIVACY.md`
+- **Règles de confidentialité (URL)** : https://github.com/fx-diff/fxfullpage/blob/main/PRIVACY.md
 
 ---
 
