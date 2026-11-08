@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Capture – FX Full Page</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="editor.css">
+  <script type="module" src="editor.js"></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="meta">
+      <div id="title" class="title">Chargement…</div>
+      <a id="source" class="source" target="_blank" rel="noopener"></a>
+    </div>
+
+    <div class="group" role="group" aria-label="Outils">
+      <button class="tool active" data-tool="crop" title="Recadrer (C)">✂ Recadrer</button>
+      <button class="tool" data-tool="box" title="Encadrer (R)">▭ Encadré</button>
+      <button class="tool" data-tool="pixelate" title="Flouter / masquer (B)">▦ Flouter</button>
+      <input id="color" type="color" value="#ef4444" title="Couleur de l'encadré">
+    </div>
+
+    <div class="group">
+      <button id="undo" title="Annuler (Ctrl+Z)" disabled>↶ Annuler</button>
+      <button id="reset" title="Revenir à l'original">⟲ Original</button>
+      <button id="zoom" title="Basculer entre ajusté et taille réelle (Z)">Taille réelle</button>
+    </div>
+
+    <div class="group">
+      <button id="copy" title="Copier dans le presse-papiers (Ctrl+C)">⧉ Copier</button>
+      <button id="dl-png" class="primary" title="Télécharger en PNG (Ctrl+S)">PNG</button>
+      <button id="dl-jpg" class="primary">JPG</button>
+      <button id="dl-pdf" class="primary">PDF</button>
+    </div>
+  </header>
+
+  <nav id="parts" class="parts" hidden></nav>
+  <div id="notice" class="notice" hidden></div>
+
+  <main id="stage" class="stage">
+    <div id="wrap" class="wrap">
+      <div id="sel" class="sel" hidden>
+        <span id="sel-size" class="sel-size"></span>
+      </div>
+      <div id="crop-actions" class="crop-actions" hidden>
+        <button id="crop-apply" class="primary">✓ Recadrer</button>
+        <button id="crop-cancel">✕</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+</body>
+</html>
