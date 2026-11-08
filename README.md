@@ -69,7 +69,8 @@ The UI is in English (default) and French, depending on the Chrome language. Str
 
 `manifest.json` is the Chrome manifest. The Firefox manifest is generated from it: a background
 script (event page) instead of a service worker, plus `browser_specific_settings.gecko`
-(add-on ID, minimum version, and `data_collection_permissions: none`).
+(add-on ID, minimum version 142, and `data_collection_permissions: none`). There is deliberately
+no `gecko_android` key, so the add-on is not marked as compatible with Firefox for Android.
 
 - Bump `version` in `manifest.json` before every new submission.
 - Validate the Firefox build with `cd dist/firefox && npx web-ext lint`.

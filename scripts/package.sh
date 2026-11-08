@@ -13,7 +13,9 @@ cd "$(dirname "$0")/.."
 
 FILES=(background.js capture-page.js db.js editor.html editor.css editor.js pdf.js icons _locales)
 GECKO_ID="fx-full-page-screenshot@fx-diff"
-GECKO_MIN_VERSION="140.0"
+# 142 is the first version supporting data_collection_permissions on every platform.
+# No "gecko_android" key: it would mark the add-on as Android-compatible on AMO.
+GECKO_MIN_VERSION="142.0"
 
 targets=("${@:-chrome firefox}")
 read -r -a targets <<< "${targets[*]}"
@@ -43,8 +45,6 @@ if target == "firefox":
             "strict_min_version": gecko_min,
             "data_collection_permissions": {"required": ["none"]},
         },
-        # data_collection_permissions requires Firefox for Android 142+.
-        "gecko_android": {"strict_min_version": "142.0"},
     }
 json.dump(m, open(out, "w"), ensure_ascii=False, indent=2)
 open(out, "a").write("\n")
