@@ -100,4 +100,4 @@ Tick all three certifications:
 - `screenshot-1-fr.png` … `screenshot-5-fr.png` – localized French screenshots, 1280×800, upload in order
   1. overview · 2. crop · 3. box, arrow, text + blur · 4. how it works · 5. result + URL/date stamp + copy
 - `promo-small.png` – small promo tile, 440×280
-- `marquee.png` – marquee promo tile, 1400×560
+- `marquee.png` – marquee promo tile, 1400×560 (`marquee-fr.png` for the French listing where the store allows it)

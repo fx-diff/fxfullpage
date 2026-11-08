@@ -84,7 +84,7 @@ Gratuit et open source (MIT) — https://github.com/fx-diff/fxfullpage
 **Images** (`store/` folder; same files for both languages, French screenshots for the French listing)
 - Extension store logo (300×300): `logo-300.png`
 - Small promotional tile (440×280): `promo-small.png`
-- Large promotional tile (1400×560): `marquee.png`
+- Large promotional tile (1400×560): `marquee.png` (English), `marquee-fr.png` (French)
 - Screenshots (1280×800): `screenshot-1.png` … `screenshot-5.png` (English), `screenshot-1-fr.png` … `screenshot-5-fr.png` (French)
 - YouTube video URL: https://www.youtube.com/watch?v=djICF5qt5hs
 
