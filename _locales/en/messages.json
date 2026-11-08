@@ -3,7 +3,7 @@
     "message": "FX Full Page Screenshot"
   },
   "extDescription": {
-    "message": "Full page screenshots with a built-in editor: crop, highlight, blur, export to PNG, JPG or PDF."
+    "message": "Full page, visible or selected-area screenshots with a free editor: crop, arrows, text, blur. Export to PNG, JPG or PDF."
   },
   "actionTitle": {
     "message": "Capture the full page"
@@ -130,5 +130,41 @@
   },
   "noticeTruncated": {
     "message": "The page was extremely long: the capture was truncated."
+  },
+  "menuFull": {
+    "message": "Capture the full page"
+  },
+  "menuVisible": {
+    "message": "Capture the visible area"
+  },
+  "menuSelection": {
+    "message": "Select an area to capture"
+  },
+  "selectHint": {
+    "message": "Drag to select an area · Esc to cancel"
+  },
+  "toolArrow": {
+    "message": "↗ Arrow"
+  },
+  "toolArrowTitle": {
+    "message": "Draw an arrow (A)"
+  },
+  "toolText": {
+    "message": "T Text"
+  },
+  "toolTextTitle": {
+    "message": "Add text (T)"
+  },
+  "textPlaceholder": {
+    "message": "Type, then press Enter"
+  },
+  "sizeTitle": {
+    "message": "Line and text size"
+  },
+  "stampLabel": {
+    "message": "URL & date"
+  },
+  "stampTitle": {
+    "message": "Add the page URL and the capture date to exports"
   }
 }

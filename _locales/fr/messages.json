@@ -3,7 +3,7 @@
     "message": "FX Full Page Screenshot"
   },
   "extDescription": {
-    "message": "Captures d'écran pleine page avec éditeur intégré : recadrage, encadré, floutage, export PNG, JPG ou PDF."
+    "message": "Captures pleine page, zone visible ou sélection, avec éditeur gratuit : recadrage, flèches, texte, flou. Export PNG, JPG, PDF."
   },
   "actionTitle": {
     "message": "Capturer la page entière"
@@ -130,5 +130,41 @@
   },
   "noticeTruncated": {
     "message": "La page était extrêmement longue : la capture a été tronquée."
+  },
+  "menuFull": {
+    "message": "Capturer la page entière"
+  },
+  "menuVisible": {
+    "message": "Capturer la zone visible"
+  },
+  "menuSelection": {
+    "message": "Sélectionner une zone à capturer"
+  },
+  "selectHint": {
+    "message": "Faites glisser pour sélectionner une zone · Échap pour annuler"
+  },
+  "toolArrow": {
+    "message": "↗ Flèche"
+  },
+  "toolArrowTitle": {
+    "message": "Dessiner une flèche (A)"
+  },
+  "toolText": {
+    "message": "T Texte"
+  },
+  "toolTextTitle": {
+    "message": "Ajouter du texte (T)"
+  },
+  "textPlaceholder": {
+    "message": "Tapez, puis Entrée"
+  },
+  "sizeTitle": {
+    "message": "Taille du trait et du texte"
+  },
+  "stampLabel": {
+    "message": "URL et date"
+  },
+  "stampTitle": {
+    "message": "Ajouter l'URL de la page et la date de capture aux exports"
   }
 }

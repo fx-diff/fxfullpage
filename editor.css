@@ -11,6 +11,9 @@
 
 * { box-sizing: border-box; }
 
+/* The hidden attribute must win over component display rules (e.g. .crop-actions is flex). */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -25,13 +28,13 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 16px;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
 }
 
-.meta { flex: 1 1 220px; min-width: 0; }
+.meta { flex: 1 1 160px; min-width: 0; }
 .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .source { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; text-decoration: none; }
 .source:hover { text-decoration: underline; }
@@ -44,7 +47,7 @@ button {
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 6px 9px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -53,6 +56,13 @@ button:disabled { opacity: .4; cursor: default; }
 button.active { background: #3a4458; border-color: #5b7bd5; }
 button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 button.primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+select {
+  font: inherit; color: var(--text); background: var(--panel);
+  border: 1px solid var(--border); border-radius: 6px; padding: 5px 6px; cursor: pointer;
+}
+.check { display: inline-flex; align-items: center; gap: 6px; padding: 0 6px; color: var(--text); cursor: pointer; white-space: nowrap; }
+.check input { accent-color: var(--accent); margin: 0; }
 
 input[type="color"] {
   width: 32px; height: 30px; padding: 2px;
@@ -77,6 +87,7 @@ input[type="color"] {
   user-select: none;
   touch-action: none;
 }
+.wrap.text-mode { cursor: text; }
 .wrap canvas { display: block; max-width: 100%; height: auto; }
 .wrap.actual { max-width: none; }
 .wrap.actual canvas { max-width: none; }
@@ -93,6 +104,14 @@ input[type="color"] {
   position: absolute; left: 0; top: -22px;
   background: rgba(0, 0, 0, .75); color: #fff;
   font-size: 11px; line-height: 1; padding: 4px 6px; border-radius: 4px; white-space: nowrap;
+}
+
+.overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.overlay line { stroke-linecap: round; }
+.text-input {
+  position: absolute; z-index: 3; min-width: 120px; padding: 2px 4px; margin: 0;
+  line-height: 1.2; font-weight: 600; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: rgba(255, 255, 255, .85); border: 1px dashed var(--accent); border-radius: 3px; outline: none;
 }
 
 .crop-actions { position: absolute; display: flex; gap: 4px; line-height: 1.4; z-index: 2; }

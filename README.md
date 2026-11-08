@@ -20,14 +20,16 @@ Or download a package from the [latest release](https://github.com/fx-diff/fxful
 
 ## Features
 
-- One-click full page capture (toolbar icon or **Alt+Shift+P**)
+- One-click full page capture (toolbar icon or **Alt+Shift+S**)
+- Visible area (**Alt+Shift+V**) or a selected area (**Alt+Shift+A**), also from the icon's right-click menu
 - Works on long pages and on web apps with their own scrolling area
 - Sticky headers and cookie banners show up once, not on every screen
 - Extra-long pages are split automatically into several images
-- Editor: crop, colored boxes, blur/pixelate, undo
+- Editor: crop, arrows, text, colored boxes (three sizes), blur/pixelate, undo
+- Optional URL and capture-date stamp on PNG, JPG, PDF and clipboard exports
 - Export to PNG, JPG or multi-page PDF, or copy to the clipboard
 - English and French interface
-- Private by design: no network requests, minimal permissions (`activeTab`, `scripting`)
+- Private by design: no network requests, minimal permissions (`activeTab`, `scripting`, `contextMenus`)
 
 ## Installation (development)
 
@@ -51,7 +53,9 @@ The temporary add-on is removed when Firefox restarts. Re-run the script and cli
 
 ## Usage
 
-- Click the icon, or press **Alt+Shift+P** (configurable in `chrome://extensions/shortcuts`).
+- Click the icon, or press **Alt+Shift+S**, to capture the full page.
+- Right-click the icon (or press **Alt+Shift+V** / **Alt+Shift+A**) to capture the visible area or drag a selection.
+- Shortcuts are configurable in `chrome://extensions/shortcuts` (Firefox: `about:addons` → ⚙ → Manage Extension Shortcuts).
 - Progress is shown on the icon badge (%). Do not switch tabs during the capture.
 - The editor opens in a new tab:
 
@@ -59,6 +63,8 @@ The temporary add-on is removed when Firefox restarts. Re-run the script and cli
 |---|---|
 | Crop (draw an area, then Enter or ✓) | `C` |
 | Colored box | `R` |
+| Arrow | `A` |
+| Text (click, type, Enter) | `T` |
 | Blur / pixelate an area | `B` |
 | Undo | `Ctrl+Z` |
 | Fit / actual size | `Z` |
@@ -72,6 +78,7 @@ Exports: PNG, JPG, PDF (A4 pages, using the width of the capture).
 
 - `background.js` scrolls the page one screen at a time, calls `chrome.tabs.captureVisibleTab`
   (limited to 2 calls per second) and stitches the frames into an `OffscreenCanvas`.
+- `select-area.js` shows the drag-to-select overlay for area captures and reports the rectangle back.
 - `capture-page.js` is injected into the page. It hides scrollbars, puts `sticky` elements back into
   the normal flow, hides `fixed` elements after the first frame (so headers are not repeated), and
   restores everything at the end. If the document itself does not scroll (Gmail, Notion…), it captures

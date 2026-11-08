@@ -11,7 +11,7 @@ Upload `dist/fxfullpage-firefox-<version>.zip` at https://addons.mozilla.org/dev
 - **Name**: FX Full Page Screenshot
 - **Add-on URL**: `fx-full-page-screenshot`
 - **Summary** (250 chars max):
-  > Full page screenshots with a built-in editor: crop, highlight, blur, export to PNG, JPG or PDF.
+  > Full page, visible or selected-area screenshots with a free editor: crop, arrows, text, blur. Export to PNG, JPG or PDF.
 - **Categories**: Photos, Music & Videos (primary); Other
 - **Support email**: your publisher contact email
 - **Support website**: https://github.com/fx-diff/fxfullpage/issues
@@ -22,22 +22,31 @@ Upload `dist/fxfullpage-firefox-<version>.zip` at https://addons.mozilla.org/dev
 
 ## Description
 
-Capture an entire web page — not just what's on screen — in one click, then crop, annotate and export it.
+Screenshot the entire page — top to bottom — in one click. Then crop it, point things out, blur what's private, and export it as PNG, JPG or PDF. No account. No tracking. Nothing ever leaves your computer.
 
-**Features**
-- One-click full page capture (or Alt+Shift+P)
-- Works on long pages and on web apps with inner scrolling areas
-- Sticky headers and floating banners are not repeated across the image
-- Very tall pages are automatically split into several images
-- Built-in editor: crop, colored boxes, blur/pixelate sensitive information, undo
-- Export to PNG, JPG or multi-page PDF, or copy to the clipboard
+📸 **Capture anything**
+- Full page in one click on the toolbar icon, or Alt+Shift+S
+- Visible area (Alt+Shift+V) or a selected area (Alt+Shift+A), also from the icon's right-click menu
+- Long articles, dashboards, and web apps with their own scrolling area
+- Sticky headers and cookie banners show up once, not on every screen
+- Extra-long pages are split automatically into several images
 
-**Privacy**
-- No account, no ads, no tracking
-- Everything happens locally in your browser: no data is ever sent anywhere
-- Only the "activeTab" and "scripting" permissions: the extension can only access the tab you click it on
+✂️ **Edit in seconds**
+- Crop to exactly what you need
+- Arrows, text and colored boxes, in three sizes
+- Blur emails, names or numbers before you share
+- Undo anything with Ctrl+Z
 
-Free and open source (MIT license): https://github.com/fx-diff/fxfullpage
+📤 **Share it your way**
+- PNG, JPG or multi-page PDF
+- Optional URL and date stamp on every export, as a record of what the page showed and when
+- Copy straight to the clipboard
+
+🔒 **Private by design**
+- Everything runs locally in your browser: no servers, no analytics, no ads
+- Minimal permissions: it can only see the tab you use it on, when you use it
+
+Free and open source (MIT) — https://github.com/fx-diff/fxfullpage
 
 ## Video
 AMO has no video field: the description can link to https://www.youtube.com/watch?v=djICF5qt5hs
@@ -45,9 +54,10 @@ AMO has no video field: the description can link to https://www.youtube.com/watc
 ## Notes to reviewer
 
 > No build step: the uploaded files are the original sources (https://github.com/fx-diff/fxfullpage).
-> To test: open any long page, click the toolbar icon (or press Alt+Shift+P). The page scrolls while
-> it is captured, then the editor opens in a new tab with crop / box / blur tools and PNG, JPG and
-> PDF export. No network requests are made; captures are stored locally in IndexedDB (last 10 only).
+> To test: open any long page and click the toolbar icon (or press Alt+Shift+S). The page scrolls while
+> it is captured, then the editor opens in a new tab with crop, box, arrow, text and blur tools and PNG,
+> JPG and PDF export. Right-click the toolbar icon for visible-area and selected-area capture
+> (Alt+Shift+V, Alt+Shift+A). No network requests are made; captures are stored locally in IndexedDB (last 10 only).
 
 ## Images
 - **Icon**: taken from the package (`icons/icon128.png`)

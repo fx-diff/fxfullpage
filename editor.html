@@ -17,8 +17,15 @@
     <div class="group" role="group" data-i18n-aria-label="toolsGroup">
       <button class="tool active" data-tool="crop" data-i18n="toolCrop" data-i18n-title="toolCropTitle"></button>
       <button class="tool" data-tool="box" data-i18n="toolBox" data-i18n-title="toolBoxTitle"></button>
+      <button class="tool" data-tool="arrow" data-i18n="toolArrow" data-i18n-title="toolArrowTitle"></button>
+      <button class="tool" data-tool="text" data-i18n="toolText" data-i18n-title="toolTextTitle"></button>
       <button class="tool" data-tool="pixelate" data-i18n="toolPixelate" data-i18n-title="toolPixelateTitle"></button>
       <input id="color" type="color" value="#ef4444" data-i18n-title="colorTitle">
+      <select id="size" data-i18n-title="sizeTitle">
+        <option value="0.6">S</option>
+        <option value="1" selected>M</option>
+        <option value="1.7">L</option>
+      </select>
     </div>
 
     <div class="group">
@@ -28,6 +35,7 @@
     </div>
 
     <div class="group">
+      <label class="check" data-i18n-title="stampTitle"><input id="stamp" type="checkbox"> <span data-i18n="stampLabel"></span></label>
       <button id="copy" data-i18n="copy" data-i18n-title="copyTitle"></button>
       <button id="dl-png" class="primary" data-i18n-title="pngTitle">PNG</button>
       <button id="dl-jpg" class="primary" data-i18n-title="jpgTitle">JPG</button>
@@ -40,6 +48,8 @@
 
   <main id="stage" class="stage">
     <div id="wrap" class="wrap">
+      <svg id="overlay" class="overlay" aria-hidden="true" preserveAspectRatio="none"><g id="arrow-preview" style="display: none"><line></line><polygon></polygon></g></svg>
+      <input id="text-input" class="text-input" type="text" hidden autocomplete="off" spellcheck="false">
       <div id="sel" class="sel" hidden>
         <span id="sel-size" class="sel-size"></span>
       </div>

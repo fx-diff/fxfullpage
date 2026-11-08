@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "contextMenus"
   ],
   "background": {
     "service_worker": "background.js",
@@ -30,9 +31,21 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Alt+Shift+P"
+        "default": "Alt+Shift+S"
       },
       "description": "__MSG_actionTitle__"
+    },
+    "capture-visible": {
+      "suggested_key": {
+        "default": "Alt+Shift+V"
+      },
+      "description": "__MSG_menuVisible__"
+    },
+    "capture-selection": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "__MSG_menuSelection__"
     }
   }
 }

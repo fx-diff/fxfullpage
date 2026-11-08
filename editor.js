@@ -1,5 +1,5 @@
 import { getCapture } from './db.js';
-import { buildPdf } from './pdf.js';
+import { buildPdf, drawStamp, stampHeight } from './pdf.js';
 
 const $ = (sel) => document.querySelector(sel);
 const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
@@ -23,6 +23,11 @@ const ui = {
   undo: $('#undo'),
   zoom: $('#zoom'),
   color: $('#color'),
+  size: $('#size'),
+  stamp: $('#stamp'),
+  overlay: $('#overlay'),
+  arrowPreview: $('#arrow-preview'),
+  textInput: $('#text-input'),
   toast: $('#toast'),
 };
 
@@ -33,6 +38,7 @@ let tool = 'crop';
 let actualSize = false;
 let selection = null; // in canvas pixels { x, y, w, h }
 let drag = null;
+let textAt = null; // canvas position of the text being typed
 
 // ---------- Utilities ----------
 
@@ -109,6 +115,7 @@ function applyCanvasSize() {
   const c = activeCanvas();
   const ratio = actualSize ? window.devicePixelRatio || 1 : record.scale || 1;
   c.style.width = `${c.width / ratio}px`;
+  ui.overlay.setAttribute('viewBox', `0 0 ${c.width} ${c.height}`);
   ui.wrap.classList.toggle('actual', actualSize);
   ui.zoom.textContent = actualSize ? t('zoomFit') : t('zoomActual');
   renderSelection();
@@ -129,9 +136,22 @@ function updateButtons() {
 }
 
 function setTool(name) {
+  commitText();
   tool = name;
   document.querySelectorAll('.tool').forEach((b) => b.classList.toggle('active', b.dataset.tool === name));
+  ui.wrap.classList.toggle('text-mode', name === 'text');
   clearSelection();
+}
+
+// Stroke and text sizes follow the capture's pixel density and the S / M / L choice.
+function sizeFactor() {
+  return parseFloat(ui.size.value) || 1;
+}
+function lineWidth() {
+  return Math.max(2, Math.round(3 * (record.scale || 1) * sizeFactor()));
+}
+function fontPx() {
+  return Math.max(10, Math.round(20 * (record.scale || 1) * sizeFactor()));
 }
 
 // ---------- Selection ----------
@@ -189,6 +209,11 @@ function pointToCanvas(clientX, clientY) {
 
 function updateDragSelection() {
   const p = pointToCanvas(drag.clientX, drag.clientY);
+  if (tool === 'arrow') {
+    drag.end = p;
+    renderArrowPreview(drag.start, p);
+    return;
+  }
   selection = {
     x: Math.min(drag.start.x, p.x),
     y: Math.min(drag.start.y, p.y),
@@ -213,8 +238,13 @@ function autoScrollLoop() {
 }
 
 ui.wrap.addEventListener('pointerdown', (e) => {
-  if (e.button !== 0 || e.target.closest('.crop-actions')) return;
+  if (e.button !== 0 || e.target.closest('.crop-actions') || e.target === ui.textInput) return;
   e.preventDefault();
+  if (tool === 'text') {
+    commitText();
+    startText(e.clientX, e.clientY);
+    return;
+  }
   ui.wrap.setPointerCapture(e.pointerId);
   drag = { start: pointToCanvas(e.clientX, e.clientY), clientX: e.clientX, clientY: e.clientY };
   updateDragSelection();
@@ -231,7 +261,14 @@ ui.wrap.addEventListener('pointermove', (e) => {
 function endDrag() {
   if (!drag) return;
   cancelAnimationFrame(drag.raf);
+  const finished = drag;
   drag = null;
+  if (tool === 'arrow') {
+    ui.arrowPreview.style.display = 'none';
+    const end = finished.end;
+    if (end && Math.hypot(end.x - finished.start.x, end.y - finished.start.y) >= 5) applyArrow(finished.start, end);
+    return;
+  }
   if (!selection || selection.w < 3 || selection.h < 3) {
     clearSelection();
     return;
@@ -320,6 +357,116 @@ function undo() {
   replaceCanvas(prev);
 }
 
+// Arrow from `a` to `b` (canvas pixels): a shaft ending at the base of a filled head.
+function arrowGeometry(a, b, lw) {
+  const len = Math.hypot(b.x - a.x, b.y - a.y);
+  const angle = Math.atan2(b.y - a.y, b.x - a.x);
+  const head = Math.min(lw * 4.5, len * 0.6);
+  const half = head * 0.55;
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  const base = { x: b.x - head * cos, y: b.y - head * sin };
+  return {
+    base,
+    head: [b, { x: base.x - half * sin, y: base.y + half * cos }, { x: base.x + half * sin, y: base.y - half * cos }],
+  };
+}
+
+function renderArrowPreview(a, b) {
+  const lw = lineWidth();
+  const g = arrowGeometry(a, b, lw);
+  const [line, poly] = ui.arrowPreview.children;
+  for (const [k, v] of Object.entries({ x1: a.x, y1: a.y, x2: g.base.x, y2: g.base.y, stroke: ui.color.value, 'stroke-width': lw })) line.setAttribute(k, v);
+  poly.setAttribute('points', g.head.map((p) => `${p.x},${p.y}`).join(' '));
+  poly.setAttribute('fill', ui.color.value);
+  ui.arrowPreview.style.display = '';
+}
+
+function applyArrow(a, b) {
+  const lw = lineWidth();
+  const g = arrowGeometry(a, b, lw);
+  const ctx = activeCanvas().getContext('2d');
+  pushHistory();
+  ctx.save();
+  ctx.strokeStyle = ui.color.value;
+  ctx.fillStyle = ui.color.value;
+  ctx.lineWidth = lw;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(g.base.x, g.base.y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(g.head[0].x, g.head[0].y);
+  ctx.lineTo(g.head[1].x, g.head[1].y);
+  ctx.lineTo(g.head[2].x, g.head[2].y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  updateButtons();
+}
+
+// Text: click places an input over the image; Enter (or clicking elsewhere) draws it.
+function startText(clientX, clientY) {
+  const p = pointToCanvas(clientX, clientY);
+  const k = cssScale();
+  textAt = p;
+  Object.assign(ui.textInput.style, {
+    left: `${p.x * k}px`,
+    top: `${p.y * k}px`,
+    fontSize: `${Math.max(10, fontPx() * k)}px`,
+    color: ui.color.value,
+  });
+  ui.textInput.value = '';
+  ui.textInput.placeholder = t('textPlaceholder');
+  ui.textInput.hidden = false;
+  requestAnimationFrame(() => ui.textInput.focus());
+}
+
+function contrastFor(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const lum = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  return lum > 0.6 ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,.9)';
+}
+
+function commitText() {
+  if (ui.textInput.hidden) return;
+  const text = ui.textInput.value.trim();
+  ui.textInput.hidden = true;
+  const at = textAt;
+  textAt = null;
+  if (!text || !at) return;
+  const fs = fontPx();
+  // The input has 1px border + 4px/2px padding: start the drawn text at the same spot.
+  const k = cssScale();
+  const x = at.x + 5 / k;
+  const y = at.y + 3 / k;
+  const ctx = activeCanvas().getContext('2d');
+  pushHistory();
+  ctx.save();
+  ctx.font = `600 ${fs}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  ctx.textBaseline = 'top';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = Math.max(2, fs * 0.16);
+  ctx.strokeStyle = contrastFor(ui.color.value);
+  ctx.strokeText(text, x, y);
+  ctx.fillStyle = ui.color.value;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+  updateButtons();
+}
+
+function cancelText() {
+  ui.textInput.hidden = true;
+  textAt = null;
+}
+
+ui.textInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); commitText(); }
+  else if (e.key === 'Escape') { e.preventDefault(); cancelText(); }
+});
+ui.textInput.addEventListener('blur', () => commitText());
+
 async function resetToOriginal() {
   const part = parts[current];
   pushHistory();
@@ -330,10 +477,36 @@ async function resetToOriginal() {
 
 // ---------- Export ----------
 
+function formatCaptureDate(ms) {
+  const d = new Date(ms);
+  const pad = (n) => String(Math.abs(n)).padStart(2, '0');
+  const off = -d.getTimezoneOffset();
+  const zone = `UTC${off >= 0 ? '+' : '-'}${pad(Math.trunc(off / 60))}:${pad(off % 60)}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} ${zone}`;
+}
+
+function stampText() {
+  return ui.stamp.checked ? `${record.url || ''}  ·  ${formatCaptureDate(record.createdAt)}` : '';
+}
+
+// Returns the canvas to export: unchanged, or with the URL / date band on top.
+function withStamp(canvas) {
+  const text = stampText();
+  if (!text) return canvas;
+  const band = stampHeight(canvas.width);
+  const out = document.createElement('canvas');
+  out.width = canvas.width;
+  out.height = canvas.height + band;
+  const ctx = out.getContext('2d');
+  ctx.drawImage(canvas, 0, band);
+  drawStamp(ctx, canvas.width, text);
+  return out;
+}
+
 async function exportImages(type, ext) {
   const base = baseFilename();
   for (let i = 0; i < parts.length; i++) {
-    const blob = await canvasToBlob(parts[i].canvas, type, 0.92);
+    const blob = await canvasToBlob(withStamp(parts[i].canvas), type, 0.92);
     const suffix = parts.length > 1 ? `-${t('partSuffix')}${i + 1}` : '';
     download(blob, `${base}${suffix}.${ext}`);
   }
@@ -341,14 +514,14 @@ async function exportImages(type, ext) {
 
 async function exportPdf() {
   toast(t('toastPdfGenerating'));
-  const blob = await buildPdf(parts.map((p) => p.canvas));
+  const blob = await buildPdf(parts.map((p) => p.canvas), { stamp: stampText() });
   download(blob, `${baseFilename()}.pdf`);
   toast(t('toastPdfReady'));
 }
 
 async function copyToClipboard() {
   try {
-    const blobPromise = canvasToBlob(activeCanvas(), 'image/png');
+    const blobPromise = canvasToBlob(withStamp(activeCanvas()), 'image/png');
     let item;
     try {
       // Chrome accepts a promise, which keeps the user activation while encoding.
@@ -382,11 +555,16 @@ $('#copy').addEventListener('click', guard(copyToClipboard));
 $('#dl-png').addEventListener('click', guard(() => exportImages('image/png', 'png')));
 $('#dl-jpg').addEventListener('click', guard(() => exportImages('image/jpeg', 'jpg')));
 $('#dl-pdf').addEventListener('click', guard(exportPdf));
+const STAMP_KEY = 'fxfp.stamp';
+try { ui.stamp.checked = localStorage.getItem(STAMP_KEY) === '1'; } catch { /* storage unavailable */ }
+ui.stamp.addEventListener('change', () => {
+  try { localStorage.setItem(STAMP_KEY, ui.stamp.checked ? '1' : '0'); } catch { /* storage unavailable */ }
+});
 window.addEventListener('resize', renderSelection);
 window.addEventListener('scroll', () => { if (selection && !drag) renderSelection(); }, { passive: true });
 
 document.addEventListener('keydown', (e) => {
-  if (!record || e.target.matches('input')) return;
+  if (!record || e.target.matches('input, select')) return;
   const mod = e.ctrlKey || e.metaKey;
   if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
   else if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); guard(() => exportImages('image/png', 'png'))(); }
@@ -396,6 +574,8 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'Escape') clearSelection();
   else if (e.key === 'c') setTool('crop');
   else if (e.key === 'r') setTool('box');
+  else if (e.key === 'a') setTool('arrow');
+  else if (e.key === 't') setTool('text');
   else if (e.key === 'b') setTool('pixelate');
   else if (e.key === 'z') { actualSize = !actualSize; applyCanvasSize(); }
 });

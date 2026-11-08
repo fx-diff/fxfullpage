@@ -1,26 +1,61 @@
 // Minimal PDF writer: each page holds one JPEG slice of the image.
 const A4_WIDTH_PT = 595.28;
 
-async function slicesToJpeg(canvases, pageRatio, quality) {
+// ---------- Stamp band (page URL + capture date) ----------
+
+export function stampHeight(width) {
+  return Math.round(Math.min(64, Math.max(22, width * 0.022)));
+}
+
+// Draws a light band across the top of `ctx` (height = stampHeight(width)) with `text`,
+// shortened with an ellipsis when it does not fit.
+export function drawStamp(ctx, width, text) {
+  const h = stampHeight(width);
+  const pad = Math.round(h * 0.45);
+  ctx.save();
+  ctx.fillStyle = '#eef1f6';
+  ctx.fillRect(0, 0, width, h);
+  ctx.fillStyle = '#d5dae3';
+  ctx.fillRect(0, h - Math.max(1, Math.round(h / 28)), width, Math.max(1, Math.round(h / 28)));
+  ctx.fillStyle = '#1f2937';
+  ctx.font = `500 ${Math.round(h * 0.46)}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  ctx.textBaseline = 'middle';
+  let label = text;
+  const max = width - pad * 2;
+  if (ctx.measureText(label).width > max) {
+    while (label.length > 1 && ctx.measureText(`${label}…`).width > max) label = label.slice(0, -1);
+    label = `${label}…`;
+  }
+  ctx.fillText(label, pad, h / 2);
+  ctx.restore();
+  return h;
+}
+
+async function slicesToJpeg(canvases, pageRatio, quality, stamp) {
   const pages = [];
   for (const src of canvases) {
     const sliceH = Math.max(1, Math.round(src.width * pageRatio));
+    const band = stamp ? stampHeight(src.width) : 0;
     for (let y = 0; y < src.height; y += sliceH) {
       const h = Math.min(sliceH, src.height - y);
-      const tmp = new OffscreenCanvas(src.width, h);
+      const tmp = new OffscreenCanvas(src.width, h + band);
       const ctx = tmp.getContext('2d');
       ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, src.width, h);
-      ctx.drawImage(src, 0, -y);
+      ctx.fillRect(0, 0, src.width, h + band);
+      // Image first, then the band on top: from page 2 on, the image rows above the slice
+      // would otherwise overlap the band.
+      ctx.drawImage(src, 0, band - y);
+      if (stamp) drawStamp(ctx, src.width, stamp);
       const blob = await tmp.convertToBlob({ type: 'image/jpeg', quality });
-      pages.push({ data: new Uint8Array(await blob.arrayBuffer()), w: src.width, h });
+      pages.push({ data: new Uint8Array(await blob.arrayBuffer()), w: src.width, h: h + band });
     }
   }
   return pages;
 }
 
-export async function buildPdf(canvases, { pageRatio = Math.SQRT2, quality = 0.92 } = {}) {
-  const pages = await slicesToJpeg(canvases, pageRatio, quality);
+// `stamp`: optional text repeated at the top of every page (URL and capture date).
+export async function buildPdf(canvases, { pageRatio = Math.SQRT2, quality = 0.92, stamp = '' } = {}) {
+  const pages = await slicesToJpeg(canvases, pageRatio, quality, stamp);
   const enc = new TextEncoder();
   const chunks = [];
   const offsets = [];

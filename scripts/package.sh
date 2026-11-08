@@ -13,7 +13,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-FILES=(background.js capture-page.js db.js editor.html editor.css editor.js pdf.js icons _locales)
+FILES=(background.js capture-page.js select-area.js db.js editor.html editor.css editor.js pdf.js icons _locales)
 GECKO_ID="fx-full-page-screenshot@fx-diff"
 # 142 is the first version supporting data_collection_permissions on every platform.
 # No "gecko_android" key: it would mark the add-on as Android-compatible on AMO.
