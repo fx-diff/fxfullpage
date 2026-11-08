@@ -71,6 +71,8 @@ Tick all three certifications:
 ---
 
 ## Images (`store/` folder)
-- `icon-128.png` – store icon (128×128)
-- `screenshot-1.png` … `screenshot-3.png` – screenshots (1280×800)
-- `promo-small.png` – small promo tile (440×280)
+- `icon-128.png` – store icon (128×128, artwork 96×96 with 16 px transparent padding)
+- `screenshot-1.png` … `screenshot-3.png` – international (English) screenshots, 1280×800
+- `screenshot-1-fr.png` … `screenshot-3-fr.png` – localized French screenshots, 1280×800
+- `promo-small.png` – small promo tile, 440×280
+- `marquee.png` – marquee promo tile, 1400×560
