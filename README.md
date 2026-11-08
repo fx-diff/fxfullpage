@@ -57,3 +57,7 @@ Interface en anglais (par défaut) et en français, selon la langue de Chrome. L
 - Impossible de capturer les pages `chrome://`, le Chrome Web Store et les visionneuses PDF (restriction Chrome).
 - Les pages qui chargent du contenu à l'infini sont capturées selon leur hauteur au début de la capture.
 - Les contenus animés au défilement peuvent produire des raccords visibles.
+
+## Licence
+
+[MIT](LICENSE) © 2026 Francois-Xavier Degroot

@@ -25,7 +25,7 @@ PRIVACY
 • Everything happens locally in your browser: no data is ever sent anywhere
 • Only the "activeTab" and "scripting" permissions: the extension can only access the tab you click it on
 
-Free and open source.
+Free and open source (MIT license): https://github.com/fx-diff/fxfullpage
 
 ## Description (Français)
 
@@ -44,7 +44,7 @@ CONFIDENTIALITÉ
 • Tout se passe en local dans votre navigateur : aucune donnée n'est envoyée
 • Seulement les permissions « activeTab » et « scripting » : l'extension n'accède qu'à l'onglet sur lequel vous cliquez
 
-Gratuit et open source.
+Gratuit et open source (licence MIT) : https://github.com/fx-diff/fxfullpage
 
 ---
 
