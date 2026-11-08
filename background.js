@@ -1,28 +1,32 @@
 import { newCaptureId, saveCapture } from './db.js';
 
-// Chrome limits captureVisibleTab to 2 calls per second.
+// Firefox exposes promise-based APIs on `browser`; Chrome on `chrome`.
+const api = globalThis.browser ?? globalThis.chrome;
+
+// Chrome limits captureVisibleTab to 2 calls per second (harmless in Firefox).
 const MIN_CAPTURE_INTERVAL_MS = 550;
-// Chrome canvas limits: 32,767 px per side, ~268 Mpx of area.
+// Canvas limits: 32,767 px per side in Chrome and Firefox; area is capped
+// conservatively so the same build works in both browsers.
 const MAX_PART_DIM = 32000;
-const MAX_PART_AREA = 200_000_000;
+const MAX_PART_AREA = 120_000_000;
 const MAX_FRAMES = 400;
 
 const busyTabs = new Set();
 let lastCaptureAt = 0;
 
-chrome.action.onClicked.addListener((tab) => {
+api.action.onClicked.addListener((tab) => {
   captureTab(tab).catch((err) => console.error('[FX Full Page Screenshot]', err));
 });
 
 async function run(tabId, func, args = []) {
-  const [res] = await chrome.scripting.executeScript({ target: { tabId }, func, args });
+  const [res] = await api.scripting.executeScript({ target: { tabId }, func, args });
   return res?.result;
 }
 
 async function setBadge(tabId, text, color = '#2563eb') {
   try {
-    await chrome.action.setBadgeBackgroundColor({ tabId, color });
-    await chrome.action.setBadgeText({ tabId, text });
+    await api.action.setBadgeBackgroundColor({ tabId, color });
+    await api.action.setBadgeText({ tabId, text });
   } catch { /* tab closed */ }
 }
 
@@ -30,7 +34,7 @@ async function throttledCapture(windowId) {
   const wait = lastCaptureAt + MIN_CAPTURE_INTERVAL_MS - Date.now();
   if (wait > 0) await new Promise((r) => setTimeout(r, wait));
   lastCaptureAt = Date.now();
-  return chrome.tabs.captureVisibleTab(windowId, { format: 'png' });
+  return api.tabs.captureVisibleTab(windowId, { format: 'png' });
 }
 
 function positions(max, step) {
@@ -60,7 +64,7 @@ async function captureTab(tab) {
 
   try {
     await setBadge(tabId, '…');
-    await chrome.scripting.executeScript({ target: { tabId }, files: ['capture-page.js'] });
+    await api.scripting.executeScript({ target: { tabId }, files: ['capture-page.js'] });
     const info = await run(tabId, () => window.__fxfp.prepare());
     prepared = true;
 
@@ -83,8 +87,8 @@ async function captureTab(tab) {
       for (const x of xs) {
         const actual = await run(tabId, (sx, sy, hide) => window.__fxfp.scrollTo(sx, sy, hide), [x, y, done > 0]);
 
-        const current = await chrome.tabs.get(tabId);
-        if (!current.active) throw new Error(chrome.i18n.getMessage('errTabLeft'));
+        const current = await api.tabs.get(tabId);
+        if (!current.active) throw new Error(api.i18n.getMessage('errTabLeft'));
 
         const dataUrl = await throttledCapture(tab.windowId);
         const bmp = await createImageBitmap(await (await fetch(dataUrl)).blob());
@@ -135,8 +139,8 @@ async function captureTab(tab) {
     });
 
     await setBadge(tabId, '');
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL(`editor.html?id=${encodeURIComponent(id)}`),
+    await api.tabs.create({
+      url: api.runtime.getURL(`editor.html?id=${encodeURIComponent(id)}`),
       index: tab.index + 1,
       openerTabId: tabId,
     });
@@ -144,7 +148,7 @@ async function captureTab(tab) {
     console.error('[FX Full Page Screenshot]', err);
     await setBadge(tabId, '!', '#dc2626');
     try {
-      await chrome.action.setTitle({ tabId, title: chrome.i18n.getMessage('errCaptureFailed', [err.message]) });
+      await api.action.setTitle({ tabId, title: api.i18n.getMessage('errCaptureFailed', [err.message]) });
     } catch { /* ignore */ }
     setTimeout(() => setBadge(tabId, ''), 5000);
   } finally {

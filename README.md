@@ -1,8 +1,10 @@
 # FX Full Page Screenshot
 
-A Chrome extension (Manifest V3) that captures an entire web page and opens it in a built-in editor.
+A browser extension (Manifest V3) for **Chrome** and **Firefox** that captures an entire web page and opens it in a built-in editor.
 
 ## Installation (development)
+
+### Chrome
 
 1. Open `chrome://extensions`
 2. Turn on **Developer mode** (top right)
@@ -11,6 +13,14 @@ A Chrome extension (Manifest V3) that captures an entire web page and opens it i
 
 > After changing `manifest.json` or anything in `_locales/`, click the reload button ↻ on the extension card.
 > Chrome reads JS/HTML files from disk live, but only reads the manifest and translations when the extension is loaded.
+
+### Firefox
+
+1. Run `./scripts/package.sh firefox`
+2. Open `about:debugging#/runtime/this-firefox`
+3. Click **Load Temporary Add-on…** and select `dist/firefox/manifest.json`
+
+The temporary add-on is removed when Firefox restarts. Re-run the script and click **Reload** after each change.
 
 ## Usage
 
@@ -39,7 +49,7 @@ Exports: PNG, JPG, PDF (A4 pages, using the width of the capture).
   the normal flow, hides `fixed` elements after the first frame (so headers are not repeated), and
   restores everything at the end. If the document itself does not scroll (Gmail, Notion…), it captures
   the largest scrollable container instead.
-- Very tall pages are split into several images (Chrome canvas limit is about 32,000 px).
+- Very tall pages are split into several images (browser canvas limit is about 32,000 px).
 - `db.js` keeps the 10 most recent captures in IndexedDB.
 - `editor.*` is the editor; `pdf.js` is a small dependency-free PDF writer.
 
@@ -48,16 +58,28 @@ Exports: PNG, JPG, PDF (A4 pages, using the width of the capture).
 The UI is in English (default) and French, depending on the Chrome language. Strings live in
 `_locales/<language>/messages.json`.
 
-## Publishing to the Chrome Web Store
+## Building and publishing
 
-- `./scripts/package.sh` builds `dist/fxfullpage-<version>.zip`, ready to upload.
+`./scripts/package.sh` builds both packages from the same source (or pass `chrome` / `firefox`):
+
+| Target | Unpacked build | Package to upload | Store |
+|---|---|---|---|
+| Chrome | `dist/chrome/` | `dist/fxfullpage-chrome-<version>.zip` | Chrome Web Store (also works for Microsoft Edge Add-ons) |
+| Firefox | `dist/firefox/` | `dist/fxfullpage-firefox-<version>.zip` | addons.mozilla.org (AMO) |
+
+`manifest.json` is the Chrome manifest. The Firefox manifest is generated from it: a background
+script (event page) instead of a service worker, plus `browser_specific_settings.gecko`
+(add-on ID, minimum version, and `data_collection_permissions: none`).
+
 - Bump `version` in `manifest.json` before every new submission.
-- Store listing copy, permission justifications and images are in `store/` (see `store/LISTING.md`).
+- Validate the Firefox build with `cd dist/firefox && npx web-ext lint`.
+- Listing copy and images: `store/LISTING.md` (Chrome Web Store), `store/AMO.md` (Firefox).
 - Privacy policy: `PRIVACY.md`.
 
 ## Known limitations
 
-- Chrome does not allow capturing `chrome://` pages, the Chrome Web Store or the built-in PDF viewer.
+- Browser-internal pages cannot be captured: `chrome://` and `about:` pages, the Chrome Web Store,
+  addons.mozilla.org and the built-in PDF viewers.
 - Infinite-scroll pages are captured at the height they had when the capture started.
 - Scroll-triggered animations can leave visible seams.
 

@@ -1,16 +1,62 @@
 #!/usr/bin/env bash
-# Builds the ZIP to upload to the Chrome Web Store: dist/fxfullpage-<version>.zip
+# Builds store packages from the same source tree.
+#
+#   ./scripts/package.sh            # both browsers
+#   ./scripts/package.sh chrome     # dist/chrome/  + dist/fxfullpage-chrome-<version>.zip
+#   ./scripts/package.sh firefox    # dist/firefox/ + dist/fxfullpage-firefox-<version>.zip
+#
+# manifest.json is the Chrome manifest (and what "Load unpacked" uses during development).
+# The Firefox manifest is derived from it: event-page background script instead of a
+# service worker, plus the Gecko-specific settings required by addons.mozilla.org.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-version=$(python3 -c 'import json; print(json.load(open("manifest.json"))["version"])')
-out="dist/fxfullpage-${version}.zip"
-files=(manifest.json background.js capture-page.js db.js editor.html editor.css editor.js pdf.js icons _locales)
+FILES=(background.js capture-page.js db.js editor.html editor.css editor.js pdf.js icons _locales)
+GECKO_ID="fx-full-page-screenshot@fx-diff"
+GECKO_MIN_VERSION="140.0"
 
-for f in "${files[@]}"; do [ -e "$f" ] || { echo "Missing file: $f" >&2; exit 1; }; done
+targets=("${@:-chrome firefox}")
+read -r -a targets <<< "${targets[*]}"
+
+for f in manifest.json "${FILES[@]}"; do [ -e "$f" ] || { echo "Missing file: $f" >&2; exit 1; }; done
 python3 -c 'import json,glob; [json.load(open(f)) for f in ["manifest.json", *glob.glob("_locales/*/messages.json")]]'
+version=$(python3 -c 'import json; print(json.load(open("manifest.json"))["version"])')
 
-mkdir -p dist
-rm -f "$out"
-zip -qr -X "$out" "${files[@]}"
-echo "OK: $out ($(du -h "$out" | cut -f1))"
+build() {
+  local target=$1
+  local dir="dist/${target}"
+  local zip="dist/fxfullpage-${target}-${version}.zip"
+
+  rm -rf "$dir" "$zip"
+  mkdir -p "$dir"
+  cp -r "${FILES[@]}" "$dir/"
+
+  python3 - "$target" "$dir/manifest.json" "$GECKO_ID" "$GECKO_MIN_VERSION" <<'PY'
+import json, sys
+target, out, gecko_id, gecko_min = sys.argv[1:]
+m = json.load(open("manifest.json"))
+if target == "firefox":
+    m["background"] = {"scripts": ["background.js"], "type": "module"}
+    m["browser_specific_settings"] = {
+        "gecko": {
+            "id": gecko_id,
+            "strict_min_version": gecko_min,
+            "data_collection_permissions": {"required": ["none"]},
+        },
+        # data_collection_permissions requires Firefox for Android 142+.
+        "gecko_android": {"strict_min_version": "142.0"},
+    }
+json.dump(m, open(out, "w"), ensure_ascii=False, indent=2)
+open(out, "a").write("\n")
+PY
+
+  (cd "$dir" && zip -qr -X "../$(basename "$zip")" .)
+  echo "OK: $zip ($(du -h "$zip" | cut -f1)) — unpacked build in $dir/"
+}
+
+for t in "${targets[@]}"; do
+  case "$t" in
+    chrome|firefox) build "$t" ;;
+    *) echo "Unknown target: $t (use chrome or firefox)" >&2; exit 1 ;;
+  esac
+done

@@ -349,7 +349,14 @@ async function exportPdf() {
 async function copyToClipboard() {
   try {
     const blobPromise = canvasToBlob(activeCanvas(), 'image/png');
-    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
+    let item;
+    try {
+      // Chrome accepts a promise, which keeps the user activation while encoding.
+      item = new ClipboardItem({ 'image/png': blobPromise });
+    } catch {
+      item = new ClipboardItem({ 'image/png': await blobPromise });
+    }
+    await navigator.clipboard.write([item]);
     toast(t('toastCopied'));
   } catch (err) {
     console.error(err);
